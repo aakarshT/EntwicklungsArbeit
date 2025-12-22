@@ -1,7 +1,10 @@
 package model;
 
+import java.util.Objects;
+
 /**
- * Represents a wind turbine installation, composed of technical data and location.
+ * Represents a wind turbine installation.
+ * This class is immutable.
  */
 public class Windkraftanlage {
 
@@ -13,46 +16,32 @@ public class Windkraftanlage {
     private final String bemerkung;
 
     /**
-     * Precondition:
-     *  - technischeDaten and standort are non-null.
-     * Postcondition:
-     *  - creates an immutable Windkraftanlage instance.
+     * Precondition: technischeDaten and standort are non-null.
+     * Postcondition: creates an immutable Windkraftanlage instance.
      */
-    public Windkraftanlage(int objektId,
-                           String name,
-                           TechnischeDaten technischeDaten,
-                           Standort standort,
-                           String betreiber,
-                           String bemerkung) {
+    public Windkraftanlage(int objektId, String name, TechnischeDaten technischeDaten,
+                           Standort standort, String betreiber, String bemerkung) {
         this.objektId = objektId;
         this.name = name;
-        this.technischeDaten = technischeDaten;
-        this.standort = standort;
+        this.technischeDaten = Objects.requireNonNull(technischeDaten);
+        this.standort = Objects.requireNonNull(standort);
         this.betreiber = betreiber;
         this.bemerkung = bemerkung;
     }
 
-    public int getObjektId() {
-        return objektId;
+    /**
+     * Precondition: neu is non-null.
+     * Postcondition: Returns a new Windkraftanlage instance with the updated Standort.
+     */
+    public Windkraftanlage withCorrectedStandort(Standort neu) {
+        return new Windkraftanlage(this.objektId, this.name, this.technischeDaten,
+                neu, this.betreiber, this.bemerkung);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public TechnischeDaten getTechnischeDaten() {
-        return technischeDaten;
-    }
-
-    public Standort getStandort() {
-        return standort;
-    }
-
-    public String getBetreiber() {
-        return betreiber;
-    }
-
-    public String getBemerkung() {
-        return bemerkung;
-    }
+    public int getObjektId() { return objektId; }
+    public String getName() { return name; }
+    public TechnischeDaten getTechnischeDaten() { return technischeDaten; }
+    public Standort getStandort() { return standort; }
+    public String getBetreiber() { return betreiber; }
+    public String getBemerkung() { return bemerkung; }
 }

@@ -34,7 +34,10 @@ public class Main {
         // Create one controller per task
         Aufgabe1 aufgabe1Controller = new Aufgabe1(ladeDauerMillis);
         Aufgabe2 aufgabe2Controller = new Aufgabe2();
-        // later: Aufgabe3Controller, Aufgabe4Controller, ...
+        Aufgabe3 aufgabe3Controller = new Aufgabe3();
+        Aufgabe4 aufgabe4Controller = new Aufgabe4();
+        Aufgabe5 aufgabe5Controller = new Aufgabe5();
+        Aufgabe6 aufgabe6Controller = new Aufgabe6();
 
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
@@ -44,6 +47,10 @@ public class Main {
             System.out.println("===== Menu =====");
             System.out.println("1 - Run Aufgabe 1");
             System.out.println("2 - Run Aufgabe 2");
+            System.out.println("3 - Run Aufgabe 3");
+            System.out.println("4 - Run Aufgabe 4");
+            System.out.println("5 - Run Aufgabe 5");
+            System.out.println("6 - Run Aufgabe 6");
             System.out.println("0 - Exit");
             System.out.print("Your choice: ");
 
@@ -52,11 +59,15 @@ public class Main {
             switch (input) {
                 case "1" -> aufgabe1Controller.run(anlagen);
                 case "2" -> aufgabe2Controller.run(anlagen);
+                case "3" -> aufgabe3Controller.run(anlagen);
+                case "4" -> aufgabe4Controller.run(anlagen);
+                case "5" -> aufgabe5Controller.run(anlagen);
+                case "6" -> aufgabe6Controller.run(anlagen);
                 case "0" -> {
                     System.out.println("Exiting program.");
                     running = false;
                 }
-                default -> System.out.println("Unknown choice. Please enter 0, 1, or 2.");
+                default -> System.out.println("Unknown choice. Please enter from 1 till 6.");
             }
         }
 

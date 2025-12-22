@@ -2,6 +2,7 @@ package model;
 
 /**
  * Represents the geographical location (standort) of a wind turbine.
+ * This class is immutable.
  */
 public class Standort {
 
@@ -14,29 +15,23 @@ public class Standort {
      * Precondition: none; values may be null if missing in the CSV.
      * Postcondition: creates an immutable Standort instance.
      */
-    public Standort(String ort,
-                    String landkreis,
-                    Double breitengrad,
-                    Double laengengrad) {
+    public Standort(String ort, String landkreis, Double breitengrad, Double laengengrad) {
         this.ort = ort;
         this.landkreis = landkreis;
         this.breitengrad = breitengrad;
         this.laengengrad = laengengrad;
     }
 
-    public String getOrt() {
-        return ort;
+    /**
+     * Precondition: none.
+     * Postcondition: Returns a new Standort instance with swapped Breitengrad and Längengrad.
+     */
+    public Standort createSwappedVersion() {
+        return new Standort(this.ort, this.landkreis, this.laengengrad, this.breitengrad);
     }
 
-    public String getLandkreis() {
-        return landkreis;
-    }
-
-    public Double getBreitengrad() {
-        return breitengrad;
-    }
-
-    public Double getLaengengrad() {
-        return laengengrad;
-    }
+    public String getOrt() { return ort; }
+    public String getLandkreis() { return landkreis; }
+    public Double getBreitengrad() { return breitengrad; }
+    public Double getLaengengrad() { return laengengrad; }
 }
