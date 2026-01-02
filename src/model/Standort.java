@@ -1,7 +1,7 @@
-package model;
+package model;  // The class Standort is stored inside the package called model
 
 /**
- * Represents the geographical location (standort) of a wind turbine.
+ * Represents the standort of a wind turbine.
  * This class is immutable.
  */
 public class Standort {

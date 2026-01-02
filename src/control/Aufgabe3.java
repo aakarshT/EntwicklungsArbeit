@@ -1,75 +1,38 @@
 package control;
 
 import model.Windkraftanlage;
-import java.util.Comparator;
+import java.util.IntSummaryStatistics;
 import java.util.List;
+import java.util.Objects;
 
-/**
- * Handles Teilaufgabe 3: Sorting based on various criteria.
- * Uses sanitized data to handle outliers and missing districts.
- */
 public class Aufgabe3 {
 
-    /**
-     * Precondition: anlagen is a non-null List.
-     * Postcondition: Displays sorted results and durations for multiple criteria.
-     */
     public void run(List<Windkraftanlage> anlagen) {
-        System.out.println("\n=== Aufgabe 3: Sorting (Sanitized) ===");
+        System.out.println("\n=== Aufgabe 3: Age Analysis (Baujahr) ===");
 
-        // 1. Sort by Sanitized Construction Year (Oldest to Newest)
-        measureAndSort(anlagen, Comparator.comparing(
-                        a -> a.getTechnischeDaten().getSanitizedBaujahr(),
-                        Comparator.nullsLast(Comparator.naturalOrder())),
-                "Baujahr (Construction Year)");
+        if (anlagen == null || anlagen.isEmpty()) {
+            System.err.println("Error: No data available.");
+            return;
+        }
 
-        // 2. Sort by Sanitized Power (Highest first)
-        measureAndSort(anlagen, Comparator.comparing(
-                        a -> a.getTechnischeDaten().getSanitizedGesamtleistung(),
-                        Comparator.nullsLast(Comparator.reverseOrder())),
-                "Sanitized Gesamtleistung (MW)");
+        // 1. Collect statistics (Min, Max, Average)
+        // We filter out '0' because getSanitizedBaujahr() returns 0 for missing data.
+        IntSummaryStatistics stats = anlagen.stream()
+                .mapToInt(w -> w.getTechnischeDaten().getSanitizedBaujahr())
+                .filter(year -> year > 1900 && year <= 2025) // Filter valid years only
+                .summaryStatistics();
 
-        // 3. Combined Sort: District then Name
-        // nullsLast now works properly because the Loader converts empty strings to null
-        measureAndSort(anlagen, Comparator.comparing(
-                                (Windkraftanlage a) -> a.getStandort().getLandkreis(),
-                                Comparator.nullsLast(Comparator.naturalOrder()))
-                        .thenComparing(Windkraftanlage::getName),
-                "Landkreis then Name");
-    }
+        if (stats.getCount() == 0) {
+            System.out.println("No valid year data found.");
+        } else {
+            System.out.println("Data Analysis of Construction Years:");
+            System.out.println("------------------------------------");
+            System.out.println(" Total Turbines with Data: " + stats.getCount());
+            System.out.println(" Oldest Turbine Built:     " + stats.getMin());
+            System.out.println(" Newest Turbine Built:     " + stats.getMax());
+            System.out.printf(" Average Construction Year: %.2f%n", stats.getAverage());
+        }
 
-    /**
-     * Helper to measure time and print results.
-     */
-    private void measureAndSort(List<Windkraftanlage> list, Comparator<Windkraftanlage> comp, String description) {
-        long start = System.nanoTime();
-        list.sort(comp);
-        long end = System.nanoTime();
-
-        long durationMs = (end - start) / 1_000_000;
-
-        System.out.println("\n--- Results for: " + description + " (Duration: " + durationMs + " ms) ---");
-
-        // Formatted table output for clarity
-        System.out.printf("%-35s | %-6s | %-12s | %-10s%n", "Name", "Year", "Power (MW)", "District");
-        System.out.println("-----------------------------------------------------------------------------");
-
-        list.stream().limit(5).forEach(a -> {
-            String yearStr = a.getTechnischeDaten().getSanitizedBaujahr() == null ? "N/A" : a.getTechnischeDaten().getSanitizedBaujahr().toString();
-            Double pwr = a.getTechnischeDaten().getSanitizedGesamtleistung();
-            String pwrStr = pwr == null ? "N/A" : String.format("%.2f", pwr);
-            String dist = a.getStandort().getLandkreis() == null ? "N/A" : a.getStandort().getLandkreis();
-
-            System.out.printf("%-35s | %-6s | %-12s | %-10s%n",
-                    truncate(a.getName(), 35),
-                    yearStr,
-                    pwrStr,
-                    dist);
-        });
-    }
-
-    private String truncate(String text, int length) {
-        if (text == null) return "N/A";
-        return text.length() > length ? text.substring(0, length - 3) + "..." : text;
+        System.out.println("--------------------------------------------------");
     }
 }

@@ -5,99 +5,163 @@ import model.Windkraftanlage;
 import utility.DistanceCalculator;
 
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
- * Handles Teilaufgabe 5: Graph construction and Data Repair.
+ * Handles Aufgabe 5: Advanced Data Repair.
+ * Strategy:
+ * 1. "Cluster Repair": Use Name grouping and 'Typ' counts (e.g. "(3x)") to distribute power.
+ * 2. "Graph Repair": Use geographic neighbors to estimate power for remaining empty entries.
  */
 public class Aufgabe5 {
 
-    private static final double MAX_DISTANCE_KM = 20.0;
+    // Regex to find numbers in brackets, e.g., "(3 WKA)" or "(2x)"
+    private static final Pattern BRACKET_COUNT_PATTERN = Pattern.compile("\\((\\d+)");
+    private static final double MAX_DISTANCE_KM = 15.0; // Radius for graph neighbors
 
-    /**
-     * Precondition: anlagen is a non-null list.
-     * Postcondition: Builds a graph and prints the number of repaired power values.
-     */
     public void run(List<Windkraftanlage> anlagen) {
-        System.out.println("\n=== Aufgabe 5: Graph & Data Repair ===");
-        long start = System.nanoTime();
+        System.out.println("\n=== Aufgabe 5: Smart Data Repair & Analysis ===");
+        long start = System.currentTimeMillis();
 
-        // 1. Build the Graph (Vertices)
-        Graph graph = new Graph();
-        for (Windkraftanlage wka : anlagen) {
-            graph.addVertex(wka);
+        // --- PHASE 1: Cluster Repair (Grouping by Name) ---
+        System.out.println("Phase 1: Repairing by Name Clusters...");
+        int repairedByCluster = runClusterRepair(anlagen);
+
+        // --- PHASE 2: Graph Repair (Geographic Neighbors) ---
+        System.out.println("Phase 2: Repairing by Geographic Graph...");
+        int repairedByGraph = runGraphRepair(anlagen);
+
+        long duration = System.currentTimeMillis() - start;
+
+        // --- SUMMARY ---
+        System.out.println("--------------------------------------------------");
+        System.out.println("Repair Summary:");
+        System.out.println(" - Fixed via Name Grouping:  " + repairedByCluster);
+        System.out.println(" - Fixed via Graph Neighbor: " + repairedByGraph);
+        System.out.println(" - Total Time:               " + duration + " ms");
+        System.out.println("--------------------------------------------------");
+    }
+
+    // ================= PHASE 1: CLUSTER LOGIC =================
+
+    private int runClusterRepair(List<Windkraftanlage> anlagen) {
+        // 1. Group all turbines by Name
+        Map<String, List<Windkraftanlage>> groups = anlagen.stream()
+                .collect(Collectors.groupingBy(Windkraftanlage::getName));
+
+        int fixCount = 0;
+
+        // 2. Process each group
+        for (List<Windkraftanlage> group : groups.values()) {
+            if (group.isEmpty()) continue;
+
+            // Try to find a "Master" row with valid Power AND a Count (e.g. "(3x)")
+            Windkraftanlage master = findMasterInGroup(group);
+
+            if (master != null) {
+                // Calculate Unit Power (Total / Count)
+                int count = extractCount(master.getTechnischeDaten().getTyp());
+                double totalPower = master.getTechnischeDaten().getSanitizedGesamtleistung();
+
+                // Avoid dividing by zero
+                if (count > 0 && totalPower > 0) {
+                    double unitPower = totalPower / count;
+
+                    // Apply this calculated power to ALL members of the group (including Master)
+                    // This "splits" the aggregated power into real individual power
+                    for (Windkraftanlage wka : group) {
+                        Double currentP = wka.getTechnischeDaten().getSanitizedGesamtleistung();
+
+                        // We update if it's 0 OR if it's the Master (to correct the aggregated value)
+                        if (currentP == null || currentP == 0.0 || wka == master) {
+                            wka.getTechnischeDaten().setGesamtleistung(unitPower);
+                            fixCount++;
+                        }
+                    }
+                }
+            }
         }
+        return fixCount;
+    }
 
-        System.out.println("Building edges (comparing distances)...");
+    private Windkraftanlage findMasterInGroup(List<Windkraftanlage> group) {
+        for (Windkraftanlage wka : group) {
+            Double p = wka.getTechnischeDaten().getSanitizedGesamtleistung();
+            String typ = wka.getTechnischeDaten().getTyp();
 
-        // 2. Build Edges (Connect if distance <= 20km)
-        // Note: Comparing 8900^2 items takes a few seconds.
+            // A Master must have Power > 0 and a "(Nx)" bracket in the type
+            if (p != null && p > 0 && typ != null && typ.contains("(")) {
+                return wka;
+            }
+        }
+        return null;
+    }
+
+    private int extractCount(String typ) {
+        if (typ == null) return 1;
+        Matcher matcher = BRACKET_COUNT_PATTERN.matcher(typ);
+        if (matcher.find()) {
+            try {
+                return Integer.parseInt(matcher.group(1));
+            } catch (NumberFormatException e) {
+                return 1;
+            }
+        }
+        return 1; // Default to 1 if no bracket found
+    }
+
+    // ================= PHASE 2: GRAPH LOGIC =================
+
+    private int runGraphRepair(List<Windkraftanlage> anlagen) {
+        // 1. Build Graph
+        Graph graph = new Graph();
+        for (Windkraftanlage wka : anlagen) graph.addVertex(wka);
+
+        // Simple nested loop to build edges (fast enough for 8900 items)
         for (int i = 0; i < anlagen.size(); i++) {
             Windkraftanlage a = anlagen.get(i);
-            // Start j at i+1 to avoid checking same pair twice
             for (int j = i + 1; j < anlagen.size(); j++) {
                 Windkraftanlage b = anlagen.get(j);
-
-                double dist = DistanceCalculator.calculateDistance(a.getStandort(), b.getStandort());
-                if (dist <= MAX_DISTANCE_KM) {
+                if (DistanceCalculator.calculateDistance(a.getStandort(), b.getStandort()) <= MAX_DISTANCE_KM) {
                     graph.addEdge(a, b);
                 }
             }
         }
 
-        System.out.println("Graph built with " + graph.getVertexCount() + " vertices and " + graph.getEdgeCount() + " edges.");
-
-        // 3. Repair Missing Power Data
-        int repairedCount = 0;
-
-        System.out.printf("%-35s | %-15s | %-15s%n", "Name", "Old Power", "Estimated Power");
-        System.out.println("-----------------------------------------------------------------------");
-
+        int fixCount = 0;
+        // 2. Find empty entries and ask neighbors
         for (Windkraftanlage wka : anlagen) {
             Double p = wka.getTechnischeDaten().getSanitizedGesamtleistung();
 
-            // If power is missing (null) or 0, try to repair it
+            // Only fix if Phase 1 didn't fix it already
             if (p == null || p == 0.0) {
-                double estimated = calculateAverageNeighborPower(graph, wka);
-                if (estimated > 0) {
-                    repairedCount++;
-                    // Print the first 5 repairs as a sample
-                    if (repairedCount <= 5) {
-                        System.out.printf("%-35s | %-15s | %-15.2f MW%n",
-                                truncate(wka.getName(), 35), "N/A", estimated);
-                    }
+                double avg = calculateNeighborAverage(graph, wka);
+                if (avg > 0) {
+                    wka.getTechnischeDaten().setGesamtleistung(avg);
+                    fixCount++;
                 }
             }
         }
-
-        long duration = (System.nanoTime() - start) / 1_000_000;
-        System.out.println("-----------------------------------------------------------------------");
-        System.out.println("Total repaired entries: " + repairedCount);
-        System.out.println("Duration: " + duration + " ms.");
+        return fixCount;
     }
 
-    /**
-     * Logic: Look at neighbors. If they have valid power, take the average.
-     */
-    private double calculateAverageNeighborPower(Graph graph, Windkraftanlage target) {
+    private double calculateNeighborAverage(Graph graph, Windkraftanlage target) {
         List<Windkraftanlage> neighbors = graph.getNeighbors(target);
         if (neighbors.isEmpty()) return 0.0;
 
         double sum = 0;
         int count = 0;
-
         for (Windkraftanlage n : neighbors) {
             Double val = n.getTechnischeDaten().getSanitizedGesamtleistung();
-            if (val != null && val > 0) {
+            // Filter: use only valid, reasonable values (e.g. < 8 MW to avoid using aggregated parks)
+            if (val != null && val > 0.1 && val < 10.0) {
                 sum += val;
                 count++;
             }
         }
-
         return count == 0 ? 0.0 : sum / count;
-    }
-
-    private String truncate(String s, int len) {
-        if (s == null) return "";
-        return s.length() > len ? s.substring(0, len-3) + "..." : s;
     }
 }

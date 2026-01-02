@@ -2,75 +2,79 @@ package control;
 
 import model.Windkraftanlage;
 import utility.WindkraftanlagenCsvLader;
+import view.ConsoleUi;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main {
 
+    private List<Windkraftanlage> anlagen;
+    private final ConsoleUi view;
+    private long loadDuration = 0; // <--- NEW: Store the time here
+
+    public Main() {
+        this.view = new ConsoleUi();
+    }
+
     public static void main(String[] args) {
-        Path csvPath = Path.of("src", "resources", "Windkraftanlagen_DE.csv");
-        WindkraftanlagenCsvLader lader = new WindkraftanlagenCsvLader();
+        new Main().start();
+    }
 
-        List<Windkraftanlage> anlagen;
-        long ladeDauerMillis;
+    public void start() {
+        System.out.println("[Debug] Working Directory: " + System.getProperty("user.dir"));
+        view.printMessage(">>> Starting Windkraftanlange Analysis <<<");
 
-        long startTime = System.nanoTime();
+        // 1. Load Data with Timer
+        WindkraftanlagenCsvLader loader = new WindkraftanlagenCsvLader();
         try {
-            anlagen = lader.load(csvPath);
+            Path path = Paths.get("src", "resources", "Windkraftanlagen_DE.csv");
+            view.printMessage("Loading CSV from: " + path.toAbsolutePath());
+
+            long start = System.currentTimeMillis(); // <--- START TIMER
+            this.anlagen = loader.load(path);
+            long end = System.currentTimeMillis();   // <--- END TIMER
+
+            this.loadDuration = end - start;         // <--- CALCULATE DURATION
+
+            view.printMessage("Loaded " + anlagen.size() + " entries successfully in " + loadDuration + " ms.");
+
         } catch (IOException e) {
-            System.err.println("Error while reading CSV file: " + e.getMessage());
-            e.printStackTrace();
+            view.printError("Error loading CSV: " + e.getMessage());
             return;
         }
-        long endTime = System.nanoTime();
-        ladeDauerMillis = (endTime - startTime) / 1_000_000;
 
-        System.out.println("Data loaded successfully. " +
-                "Number of turbines: " + anlagen.size());
+        // 2. Initialize Controllers
+        Aufgabe1 aufgabe1 = new Aufgabe1();
+        Aufgabe2 aufgabe2 = new Aufgabe2();
+        Aufgabe3 aufgabe3 = new Aufgabe3();
+        Aufgabe4 aufgabe4 = new Aufgabe4();
+        Aufgabe5 aufgabe5 = new Aufgabe5();
+        Aufgabe6 aufgabe6 = new Aufgabe6();
 
-        // Create one controller per task
-        Aufgabe1 aufgabe1Controller = new Aufgabe1(ladeDauerMillis);
-        Aufgabe2 aufgabe2Controller = new Aufgabe2();
-        Aufgabe3 aufgabe3Controller = new Aufgabe3();
-        Aufgabe4 aufgabe4Controller = new Aufgabe4();
-        Aufgabe5 aufgabe5Controller = new Aufgabe5();
-        Aufgabe6 aufgabe6Controller = new Aufgabe6();
-
-        Scanner scanner = new Scanner(System.in);
+        // 3. Main Loop
         boolean running = true;
-
         while (running) {
-            System.out.println();
-            System.out.println("===== Menu =====");
-            System.out.println("1 - Run Aufgabe 1");
-            System.out.println("2 - Run Aufgabe 2");
-            System.out.println("3 - Run Aufgabe 3");
-            System.out.println("4 - Run Aufgabe 4");
-            System.out.println("5 - Run Aufgabe 5");
-            System.out.println("6 - Run Aufgabe 6");
-            System.out.println("0 - Exit");
-            System.out.print("Your choice: ");
-
-            String input = scanner.nextLine().trim();
+            view.printMenu();
+            String input = view.getUserInput();
 
             switch (input) {
-                case "1" -> aufgabe1Controller.run(anlagen);
-                case "2" -> aufgabe2Controller.run(anlagen);
-                case "3" -> aufgabe3Controller.run(anlagen);
-                case "4" -> aufgabe4Controller.run(anlagen);
-                case "5" -> aufgabe5Controller.run(anlagen);
-                case "6" -> aufgabe6Controller.run(anlagen);
-                case "0" -> {
-                    System.out.println("Exiting program.");
+                // PASS THE DURATION HERE
+                case "1" -> aufgabe1.run(anlagen, loadDuration); // <--- UPDATE THIS LINE
+                case "2" -> aufgabe2.run(anlagen);
+                case "3" -> aufgabe3.run(anlagen);
+                case "4" -> aufgabe4.run(anlagen);
+                case "5" -> aufgabe5.run(anlagen);
+                case "6" -> aufgabe6.run(anlagen);
+                case "q", "exit" -> {
+                    view.printMessage("Exiting...");
                     running = false;
                 }
-                default -> System.out.println("Unknown choice. Please enter from 1 till 6.");
+                default -> view.printMessage("Invalid option. Please try again.");
             }
         }
-
-        scanner.close();
+        view.close();
     }
 }

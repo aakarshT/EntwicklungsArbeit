@@ -1,6 +1,6 @@
-package model;
+package model;         // The class Windkraftanlage is inside the package called model
 
-import java.util.Objects;
+import java.util.Objects; // Importing Objects from Java utilities
 
 /**
  * Represents a wind turbine installation.

@@ -1,74 +1,51 @@
 package control;
 
 import model.Windkraftanlage;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
+import java.util.Comparator;
+import java.util.Objects;
 
-/**
- * Handles Teilaufgabe 4: Specific searches and summations with data cleaning.
- */
 public class Aufgabe4 {
 
-    // Heuristic: A very large wind park might be 500MW, but 1000+ is usually a decimal error in this dataset.
-    private static final double MAX_REALISTIC_POWER = 1000.0;
-
-    /**
-     * Precondition: anlagen is a non-null List.
-     * Postcondition: Calculates statistics after sanitizing power values.
-     */
     public void run(List<Windkraftanlage> anlagen) {
-        System.out.println("\n=== Aufgabe 4: Search & Statistics (with Power Correction) ===");
-        long startTime = System.nanoTime();
+        System.out.println("\n=== Aufgabe 4: Statistics & Analysis ===");
 
-        // 1. Southernmost turbine [cite: 70]
-        Optional<Windkraftanlage> southernmost = anlagen.stream()
-                .filter(a -> a.getStandort().getBreitengrad() != null)
-                .min(Comparator.comparing(a -> a.getStandort().getBreitengrad()));
+        if (anlagen == null || anlagen.isEmpty()) {
+            System.err.println("Error: No data available for analysis.");
+            return;
+        }
 
-        // 2. Highest Total Power (Sanitized) [cite: 71]
-        Optional<Windkraftanlage> maxPower = anlagen.stream()
-                .filter(a -> a.getTechnischeDaten().getGesamtleistungMw() != null)
-                .max(Comparator.comparing(a -> sanitizePower(a.getTechnischeDaten().getGesamtleistungMw())));
-
-        // 3. Most Wind Turbines [cite: 72]
-        Optional<Windkraftanlage> mostTurbines = anlagen.stream()
-                .filter(a -> a.getTechnischeDaten().getAnzahlWindraeder() != null)
-                .max(Comparator.comparing(a -> a.getTechnischeDaten().getAnzahlWindraeder()));
-
-        // 4. Sum of all power (Sanitized) [cite: 73]
-        double totalPowerSum = anlagen.stream()
-                .filter(a -> a.getTechnischeDaten().getGesamtleistungMw() != null)
-                .mapToDouble(a -> sanitizePower(a.getTechnischeDaten().getGesamtleistungMw()))
+        // 1. Calculate Total Power (Sum of 'Gesamtleistung')
+        double totalPower = anlagen.stream()
+                .map(wka -> wka.getTechnischeDaten().getGesamtleistung())
+                .filter(Objects::nonNull)
+                .mapToDouble(Double::doubleValue)
                 .sum();
 
-        long durationMs = (System.nanoTime() - startTime) / 1_000_000;
+        // 2. Calculate Total Turbine Count (Sum of 'Anzahl')
+        int totalTurbines = anlagen.stream()
+                .map(wka -> wka.getTechnischeDaten().getAnzahl())
+                .filter(Objects::nonNull)
+                .mapToInt(Integer::intValue)
+                .sum();
 
-        // Output results [cite: 74]
-        System.out.println("Results:");
-        southernmost.ifPresent(a -> System.out.println(" - Southernmost: " + a.getName() + " (Lat: " + a.getStandort().getBreitengrad() + ")"));
+        System.out.printf("Total Installed Power:   %.2f MW%n", totalPower);
+        System.out.printf("Total Number of Turbines: %d%n", totalTurbines);
 
-        maxPower.ifPresent(a -> {
-            double power = sanitizePower(a.getTechnischeDaten().getGesamtleistungMw());
-            System.out.println(" - Highest Power: " + a.getName() + " (" + power + " MW)");
-        });
+        // 3. Find the Strongest Single Park (Max Power)
+        Windkraftanlage strongest = anlagen.stream()
+                .filter(w -> w.getTechnischeDaten().getGesamtleistung() != null)
+                .max(Comparator.comparingDouble(w -> w.getTechnischeDaten().getGesamtleistung()))
+                .orElse(null);
 
-        mostTurbines.ifPresent(a -> System.out.println(" - Most Wind Wheels: " + a.getName() + " (" + a.getTechnischeDaten().getAnzahlWindraeder() + ")"));
-
-        System.out.printf(" - Corrected Total Power Sum: %.2f MW%n", totalPowerSum);
-        System.out.println("Processing Duration: " + durationMs + " ms. [cite: 74]");
-    }
-
-    /**
-     * Heuristic to fix missing decimal points in power values.
-     * If the value is unrealistically high, divide by 10 until it is plausible.
-     */
-    private double sanitizePower(Double power) {
-        if (power == null) return 0.0;
-        double temp = power;
-        while (temp > MAX_REALISTIC_POWER) {
-            temp /= 10.0;
+        if (strongest != null) {
+            System.out.println("--------------------------------------------------");
+            System.out.println("Strongest Windpark:");
+            System.out.println(" Name:  " + strongest.getName());
+            System.out.println(" Power: " + strongest.getTechnischeDaten().getGesamtleistung() + " MW");
+            System.out.println(" Type:  " + strongest.getTechnischeDaten().getTyp());
         }
-        return temp;
+
+        System.out.println("--------------------------------------------------");
     }
 }

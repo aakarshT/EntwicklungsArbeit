@@ -1,46 +1,50 @@
-package control;
+package control;              // The class Aufgabe 1 is located in the package called control
 
-import model.Windkraftanlage;
+import model.Windkraftanlage; // Importing Windkraftanlage from the package called model
+import java.util.List;        // Importing List from Java utilities
 
-import java.util.List;
-
-/**
- * Handles the logic for Teilaufgabe 1:
- * - loading has already been done in Main
- * - here we just analyse and print basic information.
- */
 public class Aufgabe1 {
 
-    private final long ladeDauerMillis;
+    /* This method checks if the list of Wind turbines is empty or not.
+       If so, it prints an error message and terminates the method.
+    */
+    public void run(List<Windkraftanlage> anlagen, long durationMs) {
+        System.out.println("\n=== Aufgabe 1: Data Verification (Stream-Based) ===");
 
-    /**
-     * Precondition: ladeDauerMillis is the measured load duration in milliseconds.
-     * Postcondition: controller instance is ready to run Aufgabe 1.
-     */
-    public Aufgabe1(long ladeDauerMillis) {
-        this.ladeDauerMillis = ladeDauerMillis;
+        if (anlagen == null || anlagen.isEmpty()) {
+            System.err.println("Error: No data loaded!");
+            return;
+        }
+
+        // 1. Verify Count and Time
+        System.out.println("Status: Data Model & CSV Loader are working.");  // Introduction line of the output
+        System.out.println("Total Entries Loaded: " + anlagen.size());       // Prints total no of entries
+
+        // Calculate the total no of windparks after merging the entries with same name
+        long numberOfParks = anlagen.stream()
+                .map(Windkraftanlage::getName) // Get the name of every turbine
+                .distinct()                    // Keep only unique names
+                .count();                      // Count them
+
+        System.out.println("Total Windparks:     " + numberOfParks);        // Prints count of windparks after merging the entries with same name
+        System.out.println("Loading Duration:     " + durationMs + " ms");   // Prints total duration
+        System.out.println("--------------------------------------------------");
+
+        // 2. Prints the first 3 entries from the Windkraftanlagen file
+        System.out.println("Sample Data (First 3 entries):");
+
+        anlagen.stream()
+                .limit(3) // Only take the first 3 elements
+                .forEach(this::printEntry); // Pass each one to the print method
+
+        System.out.println("--------------------------------------------------");
     }
 
-    /**
-     * Precondition: anlagen is non-null (may be empty).
-     * Postcondition: Prints results for Aufgabe 1 to the console.
-     */
-    public void run(List<Windkraftanlage> anlagen) {
-        System.out.println("=== Aufgabe 1 ===");
-        System.out.println("Number of wind turbines loaded: " + anlagen.size());
-        System.out.println("Reading and parsing took: " + ladeDauerMillis + " ms.");
-
-        long withKnownPower = anlagen.stream()
-                .filter(a -> a.getTechnischeDaten().getGesamtleistungMw() != null)
-                .count();
-        System.out.println("Turbines with known total power: " + withKnownPower);
-        System.out.println("Turbines with missing total power: " +
-                (anlagen.size() - withKnownPower));
-
-        long withValidCoordinates = anlagen.stream()
-                .filter(a -> a.getStandort().getBreitengrad() != null
-                        && a.getStandort().getLaengengrad() != null)
-                .count();
-        System.out.println("Turbines with valid coordinates: " + withValidCoordinates);
+    // Helper method to keep the stream clean
+    private void printEntry(Windkraftanlage wka) {
+        System.out.printf("ID: %d | Name: %s | Typ: %s%n",
+                wka.getObjektId(),
+                wka.getName(),
+                wka.getTechnischeDaten().getTyp());
     }
 }
