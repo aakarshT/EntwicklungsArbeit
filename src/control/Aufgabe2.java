@@ -2,7 +2,7 @@ package control;                    // The class is stored inside the package ca
 
 import model.Windkraftanlage;       // Imports class Windkraftanlage from package called model
 import model.Standort;              // Imports class Standort from package called model
-import utility.Konstanten;          // Imports our central Constants class
+import utility.Konstanten;          // Imports Constants class
 import java.util.List;              // Imports List from java utilities
 import java.util.ListIterator;      // Imports List Iterator from java utilities to make changes in the list
 
@@ -18,7 +18,7 @@ public class Aufgabe2 {
      * Postcondition: Coordinates are corrected for decimal errors
      */
     public void run(List<Windkraftanlage> anlagen) {
-        System.out.println(Konstanten.A2_HEADER);   // prints the Introduction line of the Aufgabe
+        System.out.println(Konstanten.A2_HEADER);                   // prints the Introduction line of the Aufgabe
         long startTime = System.nanoTime();                         // saves the time at which the program started
         int correctedCount = 0;
 
