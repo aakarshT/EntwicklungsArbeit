@@ -1,17 +1,17 @@
-package utility;
+package utility;                        // The class is located inside the package called utilities
 
-import model.Standort;
-import model.TechnischeDaten;
-import model.Windkraftanlage;
+import model.Standort;                  // Imports Standort from the model package
+import model.TechnischeDaten;           // Imports TechnisheDaten from the model package
+import model.Windkraftanlage;           // Imports Windkraftanlage from the model package
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.io.IOException;             // Imports IO Exception for exception handling
+import java.nio.file.Files;             // Imports
+import java.nio.file.Path;              // Imports
+import java.util.ArrayList;             // Imports Arraylist from the model package
+import java.util.List;                  // Imports Lists from java utilities
+import java.util.Objects;               // Imports Objects from java utilities
+import java.util.stream.Collectors;     // Imports Collectors from stream in  java utilities
+import java.util.stream.Stream;         // Imports Streams from stream in java utilities
 
 /**
  * Loads Windkraftanlage objects from a CSV file using Java streams.

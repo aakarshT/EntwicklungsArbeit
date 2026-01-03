@@ -1,6 +1,6 @@
-package view;
+package view;               // The class is located inside the package called view
 
-import java.util.Scanner;
+import java.util.Scanner;   // Imports Scanner from java utilities
 
 public class ConsoleUi {
 
@@ -9,6 +9,8 @@ public class ConsoleUi {
     public ConsoleUi() {
         this.scanner = new Scanner(System.in);
     }
+
+    // Main menu which is shown when the program is first started
 
     public void printMenu() {
         System.out.println("\n-----------------------------------------");
@@ -23,15 +25,15 @@ public class ConsoleUi {
         System.out.print("Choice: ");
     }
 
-    public String getUserInput() {
+    public String getUserInput() {                              // Asks the user for the input
         return scanner.nextLine();
     }
 
-    public void printMessage(String message) {
+    public void printMessage(String message) {                  // prints the message
         System.out.println(message);
     }
 
-    public void printError(String error) {
+    public void printError(String error) {                      // Prints an error message if the user has entered a value which is not from 1 till 6 or q
         System.err.println(error);
     }
 

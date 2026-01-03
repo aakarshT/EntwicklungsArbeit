@@ -1,4 +1,4 @@
-package model;
+package model;                                  // The class is located inside the package called model
 
 public class TechnischeDaten {
     private Integer baujahr;
@@ -13,24 +13,24 @@ public class TechnischeDaten {
         this.typ = typ;
     }
 
-    // --- Standard Getters ---
+    //Standard Getters
     public Integer getBaujahr() { return baujahr; }
     public Double getGesamtleistung() { return gesamtleistung; }
     public Integer getAnzahl() { return anzahl; }
     public String getTyp() { return typ; }
 
-    // --- Setter (Needed for Aufgabe 5) ---
+    //Setter
     public void setGesamtleistung(Double gesamtleistung) {
         this.gesamtleistung = gesamtleistung;
     }
 
-    // --- Helper Methods (Needed for Aufgabe 3 & 4) ---
+    // Helper Methods
 
     public Double getSanitizedGesamtleistung() {
         return gesamtleistung != null ? gesamtleistung : 0.0;
     }
 
-    // This is the method that caused your error!
+
     public int getSanitizedBaujahr() {
         return baujahr != null ? baujahr : 0;
     }

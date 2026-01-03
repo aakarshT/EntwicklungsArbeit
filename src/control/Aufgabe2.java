@@ -1,31 +1,30 @@
-package control;
+package control;                    // The class is stored inside the package called control
 
-import model.Windkraftanlage;
-import model.Standort;
-import java.util.List;
-import java.util.ListIterator;
+import model.Windkraftanlage;       // Imports class Windkraftanlage from package called model
+import model.Standort;              // Imports class Standort from package called model
+import java.util.List;              // Imports List from java utilities
+import java.util.ListIterator;      // Imports List Iterator from java utilities to make changes in the list
 
-/**
- * Handles Teilaufgabe 2: Identification and correction of faulty coordinates[cite: 63, 64].
- */
 public class Aufgabe2 {
 
-    // Constants for German borders (Literals as constants as per KISS/Style rules) [cite: 38, 41]
+    /* Maximum and Minimum Latitude and Longitude of the German Borders have been set so that the values of laengengrad
+       and breitengrad from the csv file can be corrected.
+     */
     private static final double MIN_LAT = 47.0;
     private static final double MAX_LAT = 55.5;
     private static final double MIN_LON = 5.8;
     private static final double MAX_LON = 15.1;
 
     /**
-     * Precondition: anlagen is a non-null List[cite: 35].
-     * Postcondition: Coordinates are corrected for decimal errors and swaps; timing is printed[cite: 35, 65].
+     * Precondition: anlagen is a non-null List
+     * Postcondition: Coordinates are corrected for decimal errors
      */
     public void run(List<Windkraftanlage> anlagen) {
-        System.out.println("=== Aufgabe 2: Data Correction ===");
-        long startTime = System.nanoTime();
+        System.out.println("=== Aufgabe 2: Data Correction ===");   // prints the Introduction line of the Aufgabe
+        long startTime = System.nanoTime();                         // saves the time at which the program started
         int correctedCount = 0;
 
-        // Use ListIterator to replace objects in the original list [cite: 60]
+        // Use ListIterator to replace objects from the original list
         ListIterator<Windkraftanlage> iterator = anlagen.listIterator();
 
         while (iterator.hasNext()) {
@@ -40,7 +39,7 @@ public class Aufgabe2 {
             double lon = s.getLaengengrad();
             boolean changed = false;
 
-            // 1. Fix missing decimal points (Heuristic: scale down if value > 100)
+            // Fix missing decimal points if the value of Latitude and longitude is not less than 100
             double fixedLat = scaleToRange(lat, MIN_LAT, MAX_LAT);
             double fixedLon = scaleToRange(lon, MIN_LON, MAX_LON);
 
@@ -50,7 +49,7 @@ public class Aufgabe2 {
                 changed = true;
             }
 
-            // 2. Fix swapped coordinates (If Lat fits in Lon-range and vice versa)
+            //Fixes swapped coordinates (If Lat fits in Lon-range and vice versa)
             if (isSwapped(lat, lon)) {
                 double temp = lat;
                 lat = lon;
@@ -66,25 +65,25 @@ public class Aufgabe2 {
             }
         }
 
-        long endTime = System.nanoTime();
-        long durationMs = (endTime - startTime) / 1_000_000;
+        long endTime = System.nanoTime();   // saves the time at which the program ended
+        long durationMs = (endTime - startTime) / 1_000_000;  // calculates the total time required to run the program then converts it in seconds.
 
         System.out.println("Correction process finished.");
         System.out.println("Corrected (scaled or swapped) entries: " + correctedCount);
         System.out.println("Duration of correction: " + durationMs + " ms.");
     }
 
-    /**
-     * Heuristic to fix missing decimal points by dividing by 10 until it fits the range.
-     */
+
+     // Divide the value with 10 till the point it is in the correct range because many value have no decimal point
+
     private double scaleToRange(double value, double min, double max) {
         double temp = Math.abs(value);
         if (temp == 0) return value;
 
-        // If it's already in range, don't touch it
+        // If it's already in range then the value remains the same
         if (temp >= min && temp <= max) return value;
 
-        // Scale down if it looks like a missing decimal (e.g., 53123 instead of 53.123)
+        // Scale down if it looks like a missing decimal
         while (temp > max) {
             temp /= 10.0;
         }

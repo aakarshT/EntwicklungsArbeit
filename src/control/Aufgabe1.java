@@ -16,7 +16,6 @@ public class Aufgabe1 {
             return;
         }
 
-        // 1. Verify Count and Time
         System.out.println("Status: Data Model & CSV Loader are working.");  // Introduction line of the output
         System.out.println("Total Entries Loaded: " + anlagen.size());       // Prints total no of entries
 
@@ -30,7 +29,7 @@ public class Aufgabe1 {
         System.out.println("Loading Duration:     " + durationMs + " ms");   // Prints total duration
         System.out.println("--------------------------------------------------");
 
-        // 2. Prints the first 3 entries from the Windkraftanlagen file
+        //Prints the first 3 entries from the Windkraftanlagen file
         System.out.println("Sample Data (First 3 entries):");
 
         anlagen.stream()
