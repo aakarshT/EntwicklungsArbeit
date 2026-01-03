@@ -30,8 +30,12 @@ public class Standort {
         return new Standort(this.ort, this.landkreis, this.laengengrad, this.breitengrad);
     }
 
-    public String getOrt() { return ort; }
-    public String getLandkreis() { return landkreis; }
-    public Double getBreitengrad() { return breitengrad; }
-    public Double getLaengengrad() { return laengengrad; }
+    public String getOrt()
+    { return ort; }
+    public String getLandkreis()
+    { return landkreis; }
+    public Double getBreitengrad()
+    { return breitengrad; }
+    public Double getLaengengrad()
+    { return laengengrad; }
 }
