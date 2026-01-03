@@ -14,6 +14,47 @@ public class Konstanten {
     public static final String DIR_RESOURCES = "resources";
     public static final String FILE_CSV = "Windkraftanlagen_DE.csv";
 
+    // --- UI Strings ---
+    public static final String UI_MENU_SEPARATOR = "\n-----------------------------------------";
+    public static final String UI_MENU_HEADER = " Please select a task:";
+    public static final String UI_MENU_OPT_1 = " 1 - Aufgabe 1";
+    public static final String UI_MENU_OPT_2 = " 2 - Aufgabe 2";
+    public static final String UI_MENU_OPT_3 = " 3 - Aufgabe 3";
+    public static final String UI_MENU_OPT_4 = " 4 - Aufgabe 4";
+    public static final String UI_MENU_OPT_5 = " 5 - Aufgabe 5";
+    public static final String UI_MENU_OPT_6 = " 6 - Aufgabe 6";
+    public static final String UI_MENU_OPT_Q = " q - Quit";
+    public static final String UI_PROMPT_CHOICE = "Choice: ";
+
+    // --- CSV Loader ---
+    public static final String ERR_CSV_PATH_NULL = "CSV Path must not be null";
+    public static final String REGEX_CSV_SPLIT = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
+    public static final String STR_QUOTE = "\"";
+    public static final String STR_EMPTY = "";
+    public static final char CHAR_COMMA = ',';
+    public static final char CHAR_DOT = '.';
+    public static final int CSV_MIN_COLUMNS = 12;
+
+    // CSV Column Indices
+    public static final int COL_ID = 0;
+    public static final int COL_NAME = 1;
+    public static final int COL_BAUJAHR = 2;
+    public static final int COL_LEISTUNG = 3;
+    public static final int COL_ANZAHL = 4;
+    public static final int COL_TYP = 5;
+    public static final int COL_ORT = 6;
+    public static final int COL_LANDKREIS = 7;
+    public static final int COL_BREITE = 8;
+    public static final int COL_LAENGE = 9;
+    public static final int COL_BETREIBER = 10;
+    public static final int COL_BEMERKUNG = 11;
+
+    // --- Model Constants ---
+    public static final String ERR_NULL_TECH_DATA = "TechnischeDaten must not be null";
+    public static final String ERR_NULL_STANDORT = "Standort must not be null";
+    public static final double TECH_DEFAULT_POWER = 0.0;
+    public static final int TECH_DEFAULT_YEAR = 0;
+
     // --- Aufgabe 1: Strings ---
     public static final String A1_HEADER = "\n=== Aufgabe 1: Data Verification (Stream-Based) ===";
     public static final String A1_ERR_NO_DATA = "Error: No data loaded!";
@@ -31,6 +72,7 @@ public class Konstanten {
     public static final String A2_MSG_CORRECTED = "Corrected (scaled or swapped) entries: ";
     public static final String A2_MSG_DURATION = "Duration of correction: ";
 
+    public static final double GEO_EARTH_RADIUS_KM = 6371.0;
     public static final double GEO_LAT_MIN = 47.0;
     public static final double GEO_LAT_MAX = 55.5;
     public static final double GEO_LON_MIN = 5.8;
@@ -74,6 +116,7 @@ public class Konstanten {
     public static final double A5_MAX_DIST_KM = 15.0;
     public static final double A5_POWER_MIN_VALID = 0.1;
     public static final double A5_POWER_MAX_VALID = 10.0;
+    public static final int GRAPH_EDGE_DIVISOR = 2;
 
     // --- Aufgabe 6: Maintenance ---
     public static final String A6_HEADER = "\n=== Aufgabe 6: Maintenance Planning per Manufacturer ===";

@@ -24,7 +24,7 @@ public class WindkraftanlagenCsvLader {
      * Postcondition: returns a mutable List of Windkraftanlage objects.
      */
     public List<Windkraftanlage> load(Path csvPath) throws IOException {
-        Objects.requireNonNull(csvPath, "CSV Path must not be null");
+        Objects.requireNonNull(csvPath, Konstanten.ERR_CSV_PATH_NULL);
 
         try (Stream<String> lines = Files.lines(csvPath)) {
             return lines
@@ -39,31 +39,32 @@ public class WindkraftanlagenCsvLader {
      * Parses a single CSV row into a Windkraftanlage instance.
      */
     private Windkraftanlage parseLineToAnlage(String line) {
-        String[] columns = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+        // Use Constant for the complex Regex
+        String[] columns = line.split(Konstanten.REGEX_CSV_SPLIT, -1);
 
-        if (columns.length < 12) {
+        if (columns.length < Konstanten.CSV_MIN_COLUMNS) {
             return null;
         }
 
         try {
             // Use nullIfEmpty to ensure missing text fields are truly null
-            int objektId = Integer.parseInt(columns[0].trim());
-            String name = nullIfEmpty(columns[1]);
+            int objektId = Integer.parseInt(columns[Konstanten.COL_ID].trim());
+            String name = nullIfEmpty(columns[Konstanten.COL_NAME]);
 
             // Technische Daten
-            Integer baujahr = parseIntegerNullable(columns[2]);
-            Double gesamtleistung = parseDoubleNullable(columns[3]);
-            Integer anzahl = parseIntegerNullable(columns[4]);
-            String typ = nullIfEmpty(columns[5]);
+            Integer baujahr = parseIntegerNullable(columns[Konstanten.COL_BAUJAHR]);
+            Double gesamtleistung = parseDoubleNullable(columns[Konstanten.COL_LEISTUNG]);
+            Integer anzahl = parseIntegerNullable(columns[Konstanten.COL_ANZAHL]);
+            String typ = nullIfEmpty(columns[Konstanten.COL_TYP]);
 
             // Standort
-            String ort = nullIfEmpty(columns[6]);
-            String landkreis = nullIfEmpty(columns[7]);
-            Double breitengrad = parseDoubleNullable(columns[8]);
-            Double laengengrad = parseDoubleNullable(columns[9]);
+            String ort = nullIfEmpty(columns[Konstanten.COL_ORT]);
+            String landkreis = nullIfEmpty(columns[Konstanten.COL_LANDKREIS]);
+            Double breitengrad = parseDoubleNullable(columns[Konstanten.COL_BREITE]);
+            Double laengengrad = parseDoubleNullable(columns[Konstanten.COL_LAENGE]);
 
-            String betreiber = nullIfEmpty(columns[10]);
-            String bemerkung = nullIfEmpty(columns[11]);
+            String betreiber = nullIfEmpty(columns[Konstanten.COL_BETREIBER]);
+            String bemerkung = nullIfEmpty(columns[Konstanten.COL_BEMERKUNG]);
 
             TechnischeDaten tech = new TechnischeDaten(baujahr, gesamtleistung, anzahl, typ);
             Standort locus = new Standort(ort, landkreis, breitengrad, laengengrad);
@@ -76,7 +77,7 @@ public class WindkraftanlagenCsvLader {
 
     private String nullIfEmpty(String s) {
         if (s == null) return null;
-        String trimmed = s.replace("\"", "").trim();
+        String trimmed = s.replace(Konstanten.STR_QUOTE, Konstanten.STR_EMPTY).trim();
         return trimmed.isEmpty() ? null : trimmed;
     }
 
@@ -92,7 +93,7 @@ public class WindkraftanlagenCsvLader {
     private Double parseDoubleNullable(String value) {
         if (value == null || value.trim().isEmpty()) return null;
         try {
-            return Double.valueOf(value.trim().replace(',', '.'));
+            return Double.valueOf(value.trim().replace(Konstanten.CHAR_COMMA, Konstanten.CHAR_DOT));
         } catch (NumberFormatException e) {
             return null;
         }

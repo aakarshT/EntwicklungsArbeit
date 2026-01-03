@@ -1,5 +1,6 @@
 package view;               // The class is located inside the package called view
 
+import utility.Konstanten;  // Imports Constants
 import java.util.Scanner;   // Imports Scanner from java utilities
 
 public class UI {
@@ -13,16 +14,16 @@ public class UI {
     // Main menu which is shown when the program is first started
 
     public void printMenu() {
-        System.out.println("\n-----------------------------------------");
-        System.out.println(" Please select a task:");
-        System.out.println(" 1 - Aufgabe 1");
-        System.out.println(" 2 - Aufgabe 2");
-        System.out.println(" 3 - Aufgabe 3");
-        System.out.println(" 4 - Aufgabe 4");
-        System.out.println(" 5 - Aufgabe 5");
-        System.out.println(" 6 - Aufgabe 6");
-        System.out.println(" q - Quit");
-        System.out.print("Choice: ");
+        System.out.println(Konstanten.UI_MENU_SEPARATOR);
+        System.out.println(Konstanten.UI_MENU_HEADER);
+        System.out.println(Konstanten.UI_MENU_OPT_1);
+        System.out.println(Konstanten.UI_MENU_OPT_2);
+        System.out.println(Konstanten.UI_MENU_OPT_3);
+        System.out.println(Konstanten.UI_MENU_OPT_4);
+        System.out.println(Konstanten.UI_MENU_OPT_5);
+        System.out.println(Konstanten.UI_MENU_OPT_6);
+        System.out.println(Konstanten.UI_MENU_OPT_Q);
+        System.out.print(Konstanten.UI_PROMPT_CHOICE);
     }
 
     public String getUserInput() {                              // Asks the user for the input
@@ -33,7 +34,7 @@ public class UI {
         System.out.println(message);
     }
 
-    public void printError(String error) {                      // Prints an error message if the user has entered a value which is not from 1 till 6 or q
+    public void printError(String error) {                      // Prints an error message
         System.err.println(error);
     }
 

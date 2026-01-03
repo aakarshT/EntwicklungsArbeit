@@ -1,14 +1,13 @@
 package utility;
 
 import model.Standort;
+import utility.Konstanten; // Import Constants
 
 /**
  * Utility class for geographical distance calculations.
  * Implements the Haversine formula.
  */
 public class DistanceCalculator {
-
-    private static final double EARTH_RADIUS_KM = 6371.0;
 
     /**
      * Calculates the distance between two locations in km.
@@ -34,6 +33,7 @@ public class DistanceCalculator {
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        return EARTH_RADIUS_KM * c;
+        // Use Constant for Earth Radius
+        return Konstanten.GEO_EARTH_RADIUS_KM * c;
     }
 }

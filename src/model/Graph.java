@@ -1,5 +1,6 @@
 package model;
 
+import utility.Konstanten; // Import Constants
 import java.util.*;
 
 /**
@@ -41,6 +42,7 @@ public class Graph {
 
     // Helper to see total connections
     public int getEdgeCount() {
-        return adjList.values().stream().mapToInt(List::size).sum() / 2;
+        // Replaced magic number '2' with Constant
+        return adjList.values().stream().mapToInt(List::size).sum() / Konstanten.GRAPH_EDGE_DIVISOR;
     }
 }

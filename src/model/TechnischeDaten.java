@@ -1,5 +1,7 @@
 package model;                                  // The class is located inside the package called model
 
+import utility.Konstanten;                      // Import Constants
+
 public class TechnischeDaten {
     private Integer baujahr;
     private Double gesamtleistung;
@@ -27,11 +29,12 @@ public class TechnischeDaten {
     // Helper Methods
 
     public Double getSanitizedGesamtleistung() {
-        return gesamtleistung != null ? gesamtleistung : 0.0;
+        // Replaced 0.0 with Constant
+        return gesamtleistung != null ? gesamtleistung : Konstanten.TECH_DEFAULT_POWER;
     }
 
-
     public int getSanitizedBaujahr() {
-        return baujahr != null ? baujahr : 0;
+        // Replaced 0 with Constant
+        return baujahr != null ? baujahr : Konstanten.TECH_DEFAULT_YEAR;
     }
 }

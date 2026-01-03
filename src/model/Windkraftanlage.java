@@ -1,5 +1,6 @@
 package model;         // The class Windkraftanlage is inside the package called model
 
+import utility.Konstanten; // Import Constants
 import java.util.Objects; // Importing Objects from Java utilities
 
 /**
@@ -23,8 +24,11 @@ public class Windkraftanlage {
                            Standort standort, String betreiber, String bemerkung) {
         this.objektId = objektId;
         this.name = name;
-        this.technischeDaten = Objects.requireNonNull(technischeDaten);
-        this.standort = Objects.requireNonNull(standort);
+
+        // Use Constants for the error messages inside requireNonNull
+        this.technischeDaten = Objects.requireNonNull(technischeDaten, Konstanten.ERR_NULL_TECH_DATA);
+        this.standort = Objects.requireNonNull(standort, Konstanten.ERR_NULL_STANDORT);
+
         this.betreiber = betreiber;
         this.bemerkung = bemerkung;
     }
@@ -34,6 +38,7 @@ public class Windkraftanlage {
      * Postcondition: Returns a new Windkraftanlage instance with the updated Standort.
      */
     public Windkraftanlage withCorrectedStandort(Standort neu) {
+        // We can reuse the main constructor
         return new Windkraftanlage(this.objektId, this.name, this.technischeDaten,
                 neu, this.betreiber, this.bemerkung);
     }
