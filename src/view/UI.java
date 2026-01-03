@@ -2,11 +2,11 @@ package view;               // The class is located inside the package called vi
 
 import java.util.Scanner;   // Imports Scanner from java utilities
 
-public class ConsoleUi {
+public class UI {
 
     private final Scanner scanner;
 
-    public ConsoleUi() {
+    public UI() {
         this.scanner = new Scanner(System.in);
     }
 

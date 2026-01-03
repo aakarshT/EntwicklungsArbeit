@@ -3,6 +3,7 @@ package control;
 import model.Graph;
 import model.Windkraftanlage;
 import utility.DistanceCalculator;
+import utility.Konstanten; // Import constants
 
 import java.util.List;
 import java.util.Map;
@@ -19,30 +20,29 @@ import java.util.stream.Collectors;
 public class Aufgabe5 {
 
     // Regex to find numbers in brackets, e.g., "(3 WKA)" or "(2x)"
-    private static final Pattern BRACKET_COUNT_PATTERN = Pattern.compile("\\((\\d+)");
-    private static final double MAX_DISTANCE_KM = 15.0; // Radius for graph neighbors
+    private static final Pattern BRACKET_COUNT_PATTERN = Pattern.compile(Konstanten.REGEX_BRACKET_COUNT);
 
     public void run(List<Windkraftanlage> anlagen) {
-        System.out.println("\n=== Aufgabe 5: Smart Data Repair & Analysis ===");
+        System.out.println(Konstanten.A5_HEADER);
         long start = System.currentTimeMillis();
 
         // --- PHASE 1: Cluster Repair (Grouping by Name) ---
-        System.out.println("Phase 1: Repairing by Name Clusters...");
+        System.out.println(Konstanten.A5_MSG_PHASE1);
         int repairedByCluster = runClusterRepair(anlagen);
 
         // --- PHASE 2: Graph Repair (Geographic Neighbors) ---
-        System.out.println("Phase 2: Repairing by Geographic Graph...");
+        System.out.println(Konstanten.A5_MSG_PHASE2);
         int repairedByGraph = runGraphRepair(anlagen);
 
         long duration = System.currentTimeMillis() - start;
 
         // --- SUMMARY ---
-        System.out.println("--------------------------------------------------");
-        System.out.println("Repair Summary:");
-        System.out.println(" - Fixed via Name Grouping:  " + repairedByCluster);
-        System.out.println(" - Fixed via Graph Neighbor: " + repairedByGraph);
-        System.out.println(" - Total Time:               " + duration + " ms");
-        System.out.println("--------------------------------------------------");
+        System.out.println(Konstanten.SEPARATOR);
+        System.out.println(Konstanten.A5_MSG_SUMMARY);
+        System.out.println(Konstanten.A5_LBL_FIX_CLUSTER + repairedByCluster);
+        System.out.println(Konstanten.A5_LBL_FIX_GRAPH + repairedByGraph);
+        System.out.println(Konstanten.A5_LBL_TIME + duration + Konstanten.UNIT_MS);
+        System.out.println(Konstanten.SEPARATOR);
     }
 
     // ================= PHASE 1: CLUSTER LOGIC =================
@@ -93,7 +93,7 @@ public class Aufgabe5 {
             String typ = wka.getTechnischeDaten().getTyp();
 
             // A Master must have Power > 0 and a "(Nx)" bracket in the type
-            if (p != null && p > 0 && typ != null && typ.contains("(")) {
+            if (p != null && p > 0 && typ != null && typ.contains(Konstanten.BRACKET_OPEN)) {
                 return wka;
             }
         }
@@ -125,7 +125,7 @@ public class Aufgabe5 {
             Windkraftanlage a = anlagen.get(i);
             for (int j = i + 1; j < anlagen.size(); j++) {
                 Windkraftanlage b = anlagen.get(j);
-                if (DistanceCalculator.calculateDistance(a.getStandort(), b.getStandort()) <= MAX_DISTANCE_KM) {
+                if (DistanceCalculator.calculateDistance(a.getStandort(), b.getStandort()) <= Konstanten.A5_MAX_DIST_KM) {
                     graph.addEdge(a, b);
                 }
             }
@@ -157,7 +157,7 @@ public class Aufgabe5 {
         for (Windkraftanlage n : neighbors) {
             Double val = n.getTechnischeDaten().getSanitizedGesamtleistung();
             // Filter: use only valid, reasonable values (e.g. < 8 MW to avoid using aggregated parks)
-            if (val != null && val > 0.1 && val < 10.0) {
+            if (val != null && val > Konstanten.A5_POWER_MIN_VALID && val < Konstanten.A5_POWER_MAX_VALID) {
                 sum += val;
                 count++;
             }

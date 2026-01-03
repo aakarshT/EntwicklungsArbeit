@@ -2,6 +2,7 @@ package control;                    // The class is stored inside the package ca
 
 import model.Windkraftanlage;       // Imports class Windkraftanlage from package called model
 import model.Standort;              // Imports class Standort from package called model
+import utility.Konstanten;          // Imports our central Constants class
 import java.util.List;              // Imports List from java utilities
 import java.util.ListIterator;      // Imports List Iterator from java utilities to make changes in the list
 
@@ -9,18 +10,15 @@ public class Aufgabe2 {
 
     /* Maximum and Minimum Latitude and Longitude of the German Borders have been set so that the values of laengengrad
        and breitengrad from the csv file can be corrected.
+       (Note: Values are now stored in utility.Konstanten)
      */
-    private static final double MIN_LAT = 47.0;
-    private static final double MAX_LAT = 55.5;
-    private static final double MIN_LON = 5.8;
-    private static final double MAX_LON = 15.1;
 
     /**
      * Precondition: anlagen is a non-null List
      * Postcondition: Coordinates are corrected for decimal errors
      */
     public void run(List<Windkraftanlage> anlagen) {
-        System.out.println("=== Aufgabe 2: Data Correction ===");   // prints the Introduction line of the Aufgabe
+        System.out.println(Konstanten.A2_HEADER);   // prints the Introduction line of the Aufgabe
         long startTime = System.nanoTime();                         // saves the time at which the program started
         int correctedCount = 0;
 
@@ -40,8 +38,8 @@ public class Aufgabe2 {
             boolean changed = false;
 
             // Fix missing decimal points if the value of Latitude and longitude is not less than 100
-            double fixedLat = scaleToRange(lat, MIN_LAT, MAX_LAT);
-            double fixedLon = scaleToRange(lon, MIN_LON, MAX_LON);
+            double fixedLat = scaleToRange(lat, Konstanten.GEO_LAT_MIN, Konstanten.GEO_LAT_MAX);
+            double fixedLon = scaleToRange(lon, Konstanten.GEO_LON_MIN, Konstanten.GEO_LON_MAX);
 
             if (Double.compare(fixedLat, lat) != 0 || Double.compare(fixedLon, lon) != 0) {
                 lat = fixedLat;
@@ -66,15 +64,15 @@ public class Aufgabe2 {
         }
 
         long endTime = System.nanoTime();   // saves the time at which the program ended
-        long durationMs = (endTime - startTime) / 1_000_000;  // calculates the total time required to run the program then converts it in seconds.
+        long durationMs = (endTime - startTime) / Konstanten.NANO_TO_MILLI;  // calculates the total time required to run the program then converts it in seconds.
 
-        System.out.println("Correction process finished.");
-        System.out.println("Corrected (scaled or swapped) entries: " + correctedCount);
-        System.out.println("Duration of correction: " + durationMs + " ms.");
+        System.out.println(Konstanten.A2_MSG_FINISHED);
+        System.out.println(Konstanten.A2_MSG_CORRECTED + correctedCount);
+        System.out.println(Konstanten.A2_MSG_DURATION + durationMs + Konstanten.UNIT_MS);
     }
 
 
-     // Divide the value with 10 till the point it is in the correct range because many value have no decimal point
+    // Divide the value with 10 till the point it is in the correct range because many value have no decimal point
 
     private double scaleToRange(double value, double min, double max) {
         double temp = Math.abs(value);
@@ -85,13 +83,13 @@ public class Aufgabe2 {
 
         // Scale down if it looks like a missing decimal
         while (temp > max) {
-            temp /= 10.0;
+            temp /= Konstanten.SCALE_FACTOR_10;
         }
 
         return (temp >= min && temp <= max) ? temp : value;
     }
 
     private boolean isSwapped(double lat, double lon) {
-        return (lat >= MIN_LON && lat <= MAX_LON) && (lon >= MIN_LAT && lon <= MAX_LAT);
+        return (lat >= Konstanten.GEO_LON_MIN && lat <= Konstanten.GEO_LON_MAX) && (lon >= Konstanten.GEO_LAT_MIN && lon <= Konstanten.GEO_LAT_MAX);
     }
 }

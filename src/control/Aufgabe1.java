@@ -1,6 +1,7 @@
 package control;              // The class Aufgabe 1 is located in the package called control
 
 import model.Windkraftanlage; // Importing Windkraftanlage from the package called model
+import utility.Konstanten;    // Importing our new Constants class
 import java.util.List;        // Importing List from Java utilities
 
 public class Aufgabe1 {
@@ -9,15 +10,15 @@ public class Aufgabe1 {
        If so, it prints an error message and terminates the method.
     */
     public void run(List<Windkraftanlage> anlagen, long durationMs) {
-        System.out.println("\n=== Aufgabe 1: Data Verification (Stream-Based) ===");
+        System.out.println(Konstanten.A1_HEADER);
 
         if (anlagen == null || anlagen.isEmpty()) {
-            System.err.println("Error: No data loaded!");
+            System.err.println(Konstanten.A1_ERR_NO_DATA);
             return;
         }
 
-        System.out.println("Status: Data Model & CSV Loader are working.");  // Introduction line of the output
-        System.out.println("Total Entries Loaded: " + anlagen.size());       // Prints total no of entries
+        System.out.println(Konstanten.A1_STATUS_OK);  // Introduction line of the output
+        System.out.println(Konstanten.A1_MSG_ENTRIES + anlagen.size());       // Prints total no of entries
 
         // Calculate the total no of windparks after merging the entries with same name
         long numberOfParks = anlagen.stream()
@@ -25,23 +26,23 @@ public class Aufgabe1 {
                 .distinct()                    // Keep only unique names
                 .count();                      // Count them
 
-        System.out.println("Total Windparks:     " + numberOfParks);        // Prints count of windparks after merging the entries with same name
-        System.out.println("Loading Duration:     " + durationMs + " ms");   // Prints total duration
-        System.out.println("--------------------------------------------------");
+        System.out.println(Konstanten.A1_MSG_PARKS + numberOfParks);        // Prints count of windparks after merging the entries with same name
+        System.out.println(Konstanten.A1_MSG_DURATION + durationMs + Konstanten.UNIT_MS);   // Prints total duration
+        System.out.println(Konstanten.SEPARATOR);
 
         //Prints the first 3 entries from the Windkraftanlagen file
-        System.out.println("Sample Data (First 3 entries):");
+        System.out.println(Konstanten.A1_MSG_SAMPLE);
 
         anlagen.stream()
-                .limit(3) // Only take the first 3 elements
+                .limit(Konstanten.A1_SAMPLE_LIMIT) // Only take the first 3 elements
                 .forEach(this::printEntry); // Pass each one to the print method
 
-        System.out.println("--------------------------------------------------");
+        System.out.println(Konstanten.SEPARATOR);
     }
 
     // Helper method to keep the stream clean
     private void printEntry(Windkraftanlage wka) {
-        System.out.printf("ID: %d | Name: %s | Typ: %s%n",
+        System.out.printf(Konstanten.A1_FORMAT_ENTRY,
                 wka.getObjektId(),
                 wka.getName(),
                 wka.getTechnischeDaten().getTyp());

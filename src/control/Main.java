@@ -1,8 +1,9 @@
 package control;
 
 import model.Windkraftanlage;
+import utility.Konstanten; // Import constants
 import utility.WindkraftanlagenCsvLader;
-import view.ConsoleUi;
+import view.UI;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -12,11 +13,11 @@ import java.util.List;
 public class Main {
 
     private List<Windkraftanlage> anlagen;
-    private final ConsoleUi view;
-    private long loadDuration = 0; // <--- NEW: Store the time here
+    private final UI view;
+    private long loadDuration = 0; // Store the time here
 
     public Main() {
-        this.view = new ConsoleUi();
+        this.view = new UI();
     }
 
     public static void main(String[] args) {
@@ -24,25 +25,27 @@ public class Main {
     }
 
     public void start() {
-        System.out.println("[Debug] Working Directory: " + System.getProperty("user.dir"));
-        view.printMessage(">>> Starting Windkraftanlange Analysis <<<");
+        System.out.println(Konstanten.MAIN_MSG_DEBUG_DIR + System.getProperty("user.dir"));
+        view.printMessage(Konstanten.MAIN_MSG_START);
 
         // 1. Load Data with Timer
         WindkraftanlagenCsvLader loader = new WindkraftanlagenCsvLader();
         try {
-            Path path = Paths.get("src", "resources", "Windkraftanlagen_DE.csv");
-            view.printMessage("Loading CSV from: " + path.toAbsolutePath());
+            // Use constants for paths
+            Path path = Paths.get(Konstanten.DIR_SRC, Konstanten.DIR_RESOURCES, Konstanten.FILE_CSV);
+            view.printMessage(Konstanten.MAIN_MSG_LOAD_PATH + path.toAbsolutePath());
 
-            long start = System.currentTimeMillis(); // <--- START TIMER
+            long start = System.currentTimeMillis(); // START TIMER
             this.anlagen = loader.load(path);
-            long end = System.currentTimeMillis();   // <--- END TIMER
+            long end = System.currentTimeMillis();   // END TIMER
 
-            this.loadDuration = end - start;         // <--- CALCULATE DURATION
+            this.loadDuration = end - start;         // CALCULATE DURATION
 
-            view.printMessage("Loaded " + anlagen.size() + " entries successfully in " + loadDuration + " ms.");
+            // Use printf style formatting from constants
+            System.out.printf(Konstanten.MAIN_MSG_LOAD_SUCCESS, anlagen.size(), loadDuration);
 
         } catch (IOException e) {
-            view.printError("Error loading CSV: " + e.getMessage());
+            view.printError(Konstanten.MAIN_ERR_LOAD + e.getMessage());
             return;
         }
 
@@ -61,18 +64,18 @@ public class Main {
             String input = view.getUserInput();
 
             switch (input) {
-                // PASS THE DURATION HERE
-                case "1" -> aufgabe1.run(anlagen, loadDuration); // <--- UPDATE THIS LINE
-                case "2" -> aufgabe2.run(anlagen);
-                case "3" -> aufgabe3.run(anlagen);
-                case "4" -> aufgabe4.run(anlagen);
-                case "5" -> aufgabe5.run(anlagen);
-                case "6" -> aufgabe6.run(anlagen);
-                case "q", "exit" -> {
-                    view.printMessage("Exiting...");
+                // Use Constants for cases (optional but good for consistency)
+                case Konstanten.CMD_1 -> aufgabe1.run(anlagen, loadDuration);
+                case Konstanten.CMD_2 -> aufgabe2.run(anlagen);
+                case Konstanten.CMD_3 -> aufgabe3.run(anlagen);
+                case Konstanten.CMD_4 -> aufgabe4.run(anlagen);
+                case Konstanten.CMD_5 -> aufgabe5.run(anlagen);
+                case Konstanten.CMD_6 -> aufgabe6.run(anlagen);
+                case Konstanten.CMD_Q, Konstanten.CMD_EXIT -> {
+                    view.printMessage(Konstanten.MAIN_MSG_EXIT);
                     running = false;
                 }
-                default -> view.printMessage("Invalid option. Please try again.");
+                default -> view.printMessage(Konstanten.MAIN_ERR_INVALID_OPT);
             }
         }
         view.close();

@@ -1,6 +1,7 @@
 package control;
 
 import model.Windkraftanlage;
+import utility.Konstanten; // Import constants
 import java.util.List;
 import java.util.Comparator;
 import java.util.Objects;
@@ -8,10 +9,10 @@ import java.util.Objects;
 public class Aufgabe4 {
 
     public void run(List<Windkraftanlage> anlagen) {
-        System.out.println("\n=== Aufgabe 4: Statistics & Analysis ===");
+        System.out.println(Konstanten.A4_HEADER);
 
         if (anlagen == null || anlagen.isEmpty()) {
-            System.err.println("Error: No data available for analysis.");
+            System.err.println(Konstanten.A4_ERR_NO_DATA);
             return;
         }
 
@@ -29,8 +30,8 @@ public class Aufgabe4 {
                 .mapToInt(Integer::intValue)
                 .sum();
 
-        System.out.printf("Total Installed Power:   %.2f MW%n", totalPower);
-        System.out.printf("Total Number of Turbines: %d%n", totalTurbines);
+        System.out.printf(Konstanten.A4_MSG_TOTAL_POWER, totalPower);
+        System.out.printf(Konstanten.A4_MSG_TOTAL_COUNT, totalTurbines);
 
         // 3. Find the Strongest Single Park (Max Power)
         Windkraftanlage strongest = anlagen.stream()
@@ -39,13 +40,13 @@ public class Aufgabe4 {
                 .orElse(null);
 
         if (strongest != null) {
-            System.out.println("--------------------------------------------------");
-            System.out.println("Strongest Windpark:");
-            System.out.println(" Name:  " + strongest.getName());
-            System.out.println(" Power: " + strongest.getTechnischeDaten().getGesamtleistung() + " MW");
-            System.out.println(" Type:  " + strongest.getTechnischeDaten().getTyp());
+            System.out.println(Konstanten.SEPARATOR);
+            System.out.println(Konstanten.A4_MSG_STRONGEST_HEADER);
+            System.out.println(Konstanten.A4_LBL_NAME + strongest.getName());
+            System.out.println(Konstanten.A4_LBL_POWER + strongest.getTechnischeDaten().getGesamtleistung() + Konstanten.UNIT_MW);
+            System.out.println(Konstanten.A4_LBL_TYPE + strongest.getTechnischeDaten().getTyp());
         }
 
-        System.out.println("--------------------------------------------------");
+        System.out.println(Konstanten.SEPARATOR);
     }
 }
