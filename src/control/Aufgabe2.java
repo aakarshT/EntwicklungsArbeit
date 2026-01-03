@@ -2,7 +2,7 @@ package control;                    // The class is stored inside the package ca
 
 import model.Windkraftanlage;       // Imports class Windkraftanlage from package called model
 import model.Standort;              // Imports class Standort from package called model
-import utility.Konstanten;          // Imports Constants class
+import utility.Konstanten;          // Imports Constants class from utilities
 import java.util.List;              // Imports List from java utilities
 import java.util.ListIterator;      // Imports List Iterator from java utilities to make changes in the list
 
