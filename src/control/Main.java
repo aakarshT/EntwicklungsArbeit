@@ -1,14 +1,14 @@
-package control;
+package control;                                        // The class is stored in the control package
 
-import model.Windkraftanlage;
-import utility.Konstanten; // Import constants
-import utility.WindkraftanlagenCsvLader;
-import view.UI;
+import model.Windkraftanlage;                           // Imports windkraftanlage from model package
+import utility.Konstanten;                              // Import constants  from utility pacakge
+import utility.WindkraftanlagenCsvLader;                // Imports windkraftanlagaencsvlader from utility package
+import view.UI;                                         // Imports UI from view package
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
+import java.io.IOException;                             // Imports IO Exception to handle exceptions while reading the csv file
+import java.nio.file.Path;                              // Imports Path from file to locate
+import java.nio.file.Paths;                             //
+import java.util.List;                                  // Imports Lists from Util in java
 
 public class Main {
 

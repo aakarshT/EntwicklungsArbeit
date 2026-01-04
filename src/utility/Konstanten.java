@@ -1,6 +1,24 @@
 package utility;
 
 public class Konstanten {
+    // --- Main Class ---
+    public static final String MAIN_MSG_DEBUG_DIR = "[Debug] Working Directory: ";
+    public static final String MAIN_MSG_START = ">>> Starting Windkraftanlange Analysis <<<";
+    public static final String MAIN_MSG_LOAD_PATH = "Loading CSV from: ";
+    public static final String MAIN_MSG_LOAD_SUCCESS = "Loaded %d entries successfully in %d ms.%n";
+    public static final String MAIN_ERR_LOAD = "Error loading CSV: ";
+    public static final String MAIN_MSG_EXIT = "Exiting...";
+    public static final String MAIN_ERR_INVALID_OPT = "Invalid option. Please try again.";
+
+    public static final String CMD_1 = "1";
+    public static final String CMD_2 = "2";
+    public static final String CMD_3 = "3";
+    public static final String CMD_4 = "4";
+    public static final String CMD_5 = "5";
+    public static final String CMD_6 = "6";
+    public static final String CMD_Q = "q";
+    public static final String CMD_EXIT = "exit";
+
     // --- General Constants ---
     public static final String SEPARATOR = "--------------------------------------------------";
     public static final String SEPARATOR_LONG = "--------------------------------------------------------------------------";
@@ -55,8 +73,8 @@ public class Konstanten {
     public static final double TECH_DEFAULT_POWER = 0.0;
     public static final int TECH_DEFAULT_YEAR = 0;
 
-    // --- Aufgabe 1: Strings ---
-    public static final String A1_HEADER = "\n=== Aufgabe 1: Data Verification (Stream-Based) ===";
+    // --- Aufgabe 1:  ---
+    public static final String A1_HEADER = "\n=== Aufgabe 1 ===";
     public static final String A1_ERR_NO_DATA = "Error: No data loaded!";
     public static final String A1_STATUS_OK = "Status: Data Model & CSV Loader are working.";
     public static final String A1_MSG_ENTRIES = "Total Entries Loaded: ";
@@ -66,8 +84,8 @@ public class Konstanten {
     public static final String A1_FORMAT_ENTRY = "ID: %d | Name: %s | Typ: %s%n";
     public static final int A1_SAMPLE_LIMIT = 3;
 
-    // --- Aufgabe 2: Geography & Correction ---
-    public static final String A2_HEADER = "=== Aufgabe 2: Data Correction ===";
+    // --- Aufgabe 2: ---
+    public static final String A2_HEADER = "=== Aufgabe 2 ===";
     public static final String A2_MSG_FINISHED = "Correction process finished.";
     public static final String A2_MSG_CORRECTED = "Corrected (scaled or swapped) entries: ";
     public static final String A2_MSG_DURATION = "Duration of correction: ";
@@ -78,8 +96,8 @@ public class Konstanten {
     public static final double GEO_LON_MIN = 5.8;
     public static final double GEO_LON_MAX = 15.1;
 
-    // --- Aufgabe 3: Age Analysis ---
-    public static final String A3_HEADER = "\n=== Aufgabe 3: Age Analysis (Baujahr) ===";
+    // --- Aufgabe 3:  ---
+    public static final String A3_HEADER = "\n=== Aufgabe 3: ===";
     public static final String A3_ERR_NO_DATA = "Error: No data available.";
     public static final String A3_MSG_NO_VALID_YEAR = "No valid year data found.";
     public static final String A3_MSG_ANALYSIS_HEADER = "Data Analysis of Construction Years:";
@@ -92,8 +110,8 @@ public class Konstanten {
     public static final int YEAR_MIN_VALID = 1900;
     public static final int YEAR_MAX_VALID = 2025;
 
-    // --- Aufgabe 4: Statistics ---
-    public static final String A4_HEADER = "\n=== Aufgabe 4: Statistics & Analysis ===";
+    // --- Aufgabe 4:  ---
+    public static final String A4_HEADER = "\n=== Aufgabe 4: ===";
     public static final String A4_ERR_NO_DATA = "Error: No data available for analysis.";
     public static final String A4_MSG_TOTAL_POWER = "Total Installed Power:   %.2f MW%n";
     public static final String A4_MSG_TOTAL_COUNT = "Total Number of Turbines: %d%n";
@@ -102,8 +120,8 @@ public class Konstanten {
     public static final String A4_LBL_POWER = " Power: ";
     public static final String A4_LBL_TYPE = " Type:  ";
 
-    // --- Aufgabe 5: Smart Repair ---
-    public static final String A5_HEADER = "\n=== Aufgabe 5: Smart Data Repair & Analysis ===";
+    // --- Aufgabe 5:  ---
+    public static final String A5_HEADER = "\n=== Aufgabe 5: ===";
     public static final String A5_MSG_PHASE1 = "Phase 1: Repairing by Name Clusters...";
     public static final String A5_MSG_PHASE2 = "Phase 2: Repairing by Geographic Graph...";
     public static final String A5_MSG_SUMMARY = "Repair Summary:";
@@ -118,8 +136,8 @@ public class Konstanten {
     public static final double A5_POWER_MAX_VALID = 10.0;
     public static final int GRAPH_EDGE_DIVISOR = 2;
 
-    // --- Aufgabe 6: Maintenance ---
-    public static final String A6_HEADER = "\n=== Aufgabe 6: Maintenance Planning per Manufacturer ===";
+    // --- Aufgabe 6:  ---
+    public static final String A6_HEADER = "\n=== Aufgabe 6 ===";
     public static final String A6_TABLE_FORMAT = "%-20s | %-10s | %-15s | %-15s%n";
     public static final String A6_COL_MANUFACTURER = "Manufacturer";
     public static final String A6_COL_COUNT = "Count";
@@ -135,21 +153,5 @@ public class Konstanten {
     public static final int A6_MIN_NAME_LEN = 2;
     public static final int A6_TRUNCATE_LEN = 20;
 
-    // --- Main Class ---
-    public static final String MAIN_MSG_DEBUG_DIR = "[Debug] Working Directory: ";
-    public static final String MAIN_MSG_START = ">>> Starting Windkraftanlange Analysis <<<";
-    public static final String MAIN_MSG_LOAD_PATH = "Loading CSV from: ";
-    public static final String MAIN_MSG_LOAD_SUCCESS = "Loaded %d entries successfully in %d ms.%n";
-    public static final String MAIN_ERR_LOAD = "Error loading CSV: ";
-    public static final String MAIN_MSG_EXIT = "Exiting...";
-    public static final String MAIN_ERR_INVALID_OPT = "Invalid option. Please try again.";
 
-    public static final String CMD_1 = "1";
-    public static final String CMD_2 = "2";
-    public static final String CMD_3 = "3";
-    public static final String CMD_4 = "4";
-    public static final String CMD_5 = "5";
-    public static final String CMD_6 = "6";
-    public static final String CMD_Q = "q";
-    public static final String CMD_EXIT = "exit";
 }
