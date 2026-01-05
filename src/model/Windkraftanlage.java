@@ -3,9 +3,9 @@ package model;         // The class Windkraftanlage is inside the package called
 import utility.Konstanten; // Import Constants
 import java.util.Objects; // Importing Objects from Java utilities
 
-/**
- * Represents a wind turbine installation.
- * This class is immutable.
+/*
+  Represents a wind turbine installation.
+  This class is immutable.
  */
 public class Windkraftanlage {
 
@@ -16,10 +16,9 @@ public class Windkraftanlage {
     private final String betreiber;
     private final String bemerkung;
 
-    /**
-     * Precondition: technischeDaten and standort are non-null.
-     * Postcondition: creates an immutable Windkraftanlage instance.
-     */
+    //technischeDaten and standort are non-null.
+
+
     public Windkraftanlage(int objektId, String name, TechnischeDaten technischeDaten,
                            Standort standort, String betreiber, String bemerkung) {
         this.objektId = objektId;
@@ -34,11 +33,10 @@ public class Windkraftanlage {
     }
 
     /**
-     * Precondition: neu is non-null.
-     * Postcondition: Returns a new Windkraftanlage instance with the updated Standort.
+     * neu is non-null.
+     * Returns a new Windkraftanlage instance with the updated Standort.
      */
     public Windkraftanlage withCorrectedStandort(Standort neu) {
-        // We can reuse the main constructor
         return new Windkraftanlage(this.objektId, this.name, this.technischeDaten,
                 neu, this.betreiber, this.bemerkung);
     }

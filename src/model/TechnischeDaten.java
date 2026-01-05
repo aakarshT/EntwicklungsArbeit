@@ -29,12 +29,10 @@ public class TechnischeDaten {
     // Helper Methods
 
     public Double getSanitizedGesamtleistung() {
-        // Replaced 0.0 with Constant
         return gesamtleistung != null ? gesamtleistung : Konstanten.TECH_DEFAULT_POWER;
     }
 
     public int getSanitizedBaujahr() {
-        // Replaced 0 with Constant
         return baujahr != null ? baujahr : Konstanten.TECH_DEFAULT_YEAR;
     }
 }

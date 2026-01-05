@@ -12,8 +12,8 @@ public class Standort {
     private final Double laengengrad;
 
     /**
-     * Precondition: none; values may be null if missing in the CSV.
-     * Postcondition: creates an immutable Standort instance.
+      none; values may be null if missing in the CSV.
+      creates an immutable Standort instance.
      */
     public Standort(String ort, String landkreis, Double breitengrad, Double laengengrad) {
         this.ort = ort;
@@ -22,10 +22,8 @@ public class Standort {
         this.laengengrad = laengengrad;
     }
 
-    /**
-     * Precondition: none.
-     * Postcondition: Returns a new Standort instance with swapped Breitengrad and Längengrad.
-     */
+    //Returns a new Standort instance with swapped Breitengrad and Längengrad.
+
     public Standort createSwappedVersion() {
         return new Standort(this.ort, this.landkreis, this.laengengrad, this.breitengrad);
     }

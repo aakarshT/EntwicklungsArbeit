@@ -6,9 +6,9 @@ public class Konstanten {
     public static final String MAIN_MSG_START = ">>> Starting Windkraftanlange Analysis <<<";
     public static final String MAIN_MSG_LOAD_PATH = "Loading CSV from: ";
     public static final String MAIN_MSG_LOAD_SUCCESS = "Loaded %d entries successfully in %d ms.%n";
-    public static final String MAIN_ERR_LOAD = "Error loading CSV: ";
+    public static final String MAIN_ERR_LOAD = "Error loading CSV file: ";
     public static final String MAIN_MSG_EXIT = "Exiting...";
-    public static final String MAIN_ERR_INVALID_OPT = "Invalid option. Please try again.";
+    public static final String MAIN_ERR_INVALID_OPT = "Invalid, Please choose a valid option";
 
     public static final String CMD_1 = "1";
     public static final String CMD_2 = "2";
@@ -22,8 +22,8 @@ public class Konstanten {
     // --- General Constants ---
     public static final String SEPARATOR = "--------------------------------------------------";
     public static final String SEPARATOR_LONG = "--------------------------------------------------------------------------";
-    public static final String UNIT_MS = " ms";
-    public static final String UNIT_MW = " MW";
+    public static final String UNIT_MS = " ms";                 //Miliseconds
+    public static final String UNIT_MW = " MW";                 //Megawatt
     public static final long NANO_TO_MILLI = 1_000_000;
     public static final double SCALE_FACTOR_10 = 10.0;
 
@@ -33,7 +33,7 @@ public class Konstanten {
     public static final String FILE_CSV = "Windkraftanlagen_DE.csv";
 
     // --- UI Strings ---
-    public static final String UI_MENU_SEPARATOR = "\n-----------------------------------------";
+    public static final String UI_MENU_SEPARATOR = "-----------------------------------------";
     public static final String UI_MENU_HEADER = " Please select a task:";
     public static final String UI_MENU_OPT_1 = " 1 - Aufgabe 1";
     public static final String UI_MENU_OPT_2 = " 2 - Aufgabe 2";
@@ -45,7 +45,7 @@ public class Konstanten {
     public static final String UI_PROMPT_CHOICE = "Choice: ";
 
     // --- CSV Loader ---
-    public static final String ERR_CSV_PATH_NULL = "CSV Path must not be null";
+    public static final String ERR_CSV_PATH_NULL = "CSV Path should not be empty";
     public static final String REGEX_CSV_SPLIT = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
     public static final String STR_QUOTE = "\"";
     public static final String STR_EMPTY = "";
@@ -68,13 +68,13 @@ public class Konstanten {
     public static final int COL_BEMERKUNG = 11;
 
     // --- Model Constants ---
-    public static final String ERR_NULL_TECH_DATA = "TechnischeDaten must not be null";
-    public static final String ERR_NULL_STANDORT = "Standort must not be null";
+    public static final String ERR_NULL_TECH_DATA = "TechnischeDaten should not be null";
+    public static final String ERR_NULL_STANDORT = "Standort should not be null";
     public static final double TECH_DEFAULT_POWER = 0.0;
     public static final int TECH_DEFAULT_YEAR = 0;
 
     // --- Aufgabe 1:  ---
-    public static final String A1_HEADER = "\n=== Aufgabe 1 ===";
+    public static final String A1_HEADER = "=== Aufgabe 1 ===";
     public static final String A1_ERR_NO_DATA = "Error: No data loaded!";
     public static final String A1_STATUS_OK = "Status: Data Model & CSV Loader are working.";
     public static final String A1_MSG_ENTRIES = "Total Entries Loaded: ";
@@ -87,17 +87,17 @@ public class Konstanten {
     // --- Aufgabe 2: ---
     public static final String A2_HEADER = "=== Aufgabe 2 ===";
     public static final String A2_MSG_FINISHED = "Correction process finished.";
-    public static final String A2_MSG_CORRECTED = "Corrected (scaled or swapped) entries: ";
-    public static final String A2_MSG_DURATION = "Duration of correction: ";
+    public static final String A2_MSG_CORRECTED = "Total Corrected entries: ";
+    public static final String A2_MSG_DURATION = "Time taken for correction: ";
 
-    public static final double GEO_EARTH_RADIUS_KM = 6371.0;
-    public static final double GEO_LAT_MIN = 47.0;
-    public static final double GEO_LAT_MAX = 55.5;
-    public static final double GEO_LON_MIN = 5.8;
-    public static final double GEO_LON_MAX = 15.1;
+    public static final double GEO_EARTH_RADIUS_KM = 6371.0;            //Radius of earth
+    public static final double GEO_LAT_MIN = 47.0;                      //Minimum value of latitude for germany
+    public static final double GEO_LAT_MAX = 55.5;                      //Maximum value of latitude for germany
+    public static final double GEO_LON_MIN = 5.8;                       //Minimum value of longitude for germany
+    public static final double GEO_LON_MAX = 15.1;                      //Maximum value of longitude for germany
 
     // --- Aufgabe 3:  ---
-    public static final String A3_HEADER = "\n=== Aufgabe 3: ===";
+    public static final String A3_HEADER = "=== Aufgabe 3: ===";
     public static final String A3_ERR_NO_DATA = "Error: No data available.";
     public static final String A3_MSG_NO_VALID_YEAR = "No valid year data found.";
     public static final String A3_MSG_ANALYSIS_HEADER = "Data Analysis of Construction Years:";
@@ -111,7 +111,7 @@ public class Konstanten {
     public static final int YEAR_MAX_VALID = 2025;
 
     // --- Aufgabe 4:  ---
-    public static final String A4_HEADER = "\n=== Aufgabe 4: ===";
+    public static final String A4_HEADER = "=== Aufgabe 4: ===";
     public static final String A4_ERR_NO_DATA = "Error: No data available for analysis.";
     public static final String A4_MSG_TOTAL_POWER = "Total Installed Power:   %.2f MW%n";
     public static final String A4_MSG_TOTAL_COUNT = "Total Number of Turbines: %d%n";
@@ -121,7 +121,7 @@ public class Konstanten {
     public static final String A4_LBL_TYPE = " Type:  ";
 
     // --- Aufgabe 5:  ---
-    public static final String A5_HEADER = "\n=== Aufgabe 5: ===";
+    public static final String A5_HEADER = "=== Aufgabe 5: ===";
     public static final String A5_MSG_PHASE1 = "Phase 1: Repairing by Name Clusters...";
     public static final String A5_MSG_PHASE2 = "Phase 2: Repairing by Geographic Graph...";
     public static final String A5_MSG_SUMMARY = "Repair Summary:";
@@ -137,7 +137,7 @@ public class Konstanten {
     public static final int GRAPH_EDGE_DIVISOR = 2;
 
     // --- Aufgabe 6:  ---
-    public static final String A6_HEADER = "\n=== Aufgabe 6 ===";
+    public static final String A6_HEADER = "=== Aufgabe 6 ===";
     public static final String A6_TABLE_FORMAT = "%-20s | %-10s | %-15s | %-15s%n";
     public static final String A6_COL_MANUFACTURER = "Manufacturer";
     public static final String A6_COL_COUNT = "Count";

@@ -11,7 +11,7 @@ public class UI {
         this.scanner = new Scanner(System.in);
     }
 
-    // Main menu which is shown when the program is first started
+    // Main menu
 
     public void printMenu() {
         System.out.println(Konstanten.UI_MENU_SEPARATOR);
@@ -36,9 +36,9 @@ public class UI {
 
     public void printError(String error) {                      // Prints an error message
         System.err.println(error);
-    }
+    }  // prints error
 
     public void close() {
         scanner.close();
-    }
+    }                             // closes the scnaeer
 }

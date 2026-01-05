@@ -10,7 +10,6 @@ public class Aufgabe2 {
 
     /* Maximum and Minimum Latitude and Longitude of the German Borders have been set so that the values of laengengrad
        and breitengrad from the csv file can be corrected.
-       (Note: Values are now stored in utility.Konstanten)
      */
 
     /**

@@ -1,12 +1,12 @@
 package utility;                        // The class is located inside the package called utilities
 
 import model.Standort;                  // Imports Standort from the model package
-import model.TechnischeDaten;           // Imports TechnisheDaten from the model package
+import model.TechnischeDaten;           // Imports TechnischeDaten from the model package
 import model.Windkraftanlage;           // Imports Windkraftanlage from the model package
 
 import java.io.IOException;             // Imports IO Exception for exception handling
-import java.nio.file.Files;             // Imports
-import java.nio.file.Path;              // Imports
+import java.nio.file.Files;             // Imports Files utility
+import java.nio.file.Path;              // Imports Path class
 import java.util.ArrayList;             // Imports Arraylist from the model package
 import java.util.List;                  // Imports Lists from java utilities
 import java.util.Objects;               // Imports Objects from java utilities
