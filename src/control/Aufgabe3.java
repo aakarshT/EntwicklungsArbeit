@@ -1,13 +1,21 @@
 package control;
 
+import model.TechnischeDaten;
 import model.Windkraftanlage;
-import utility.Konstanten; // Import constants
+import resources.Konstanten;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 
 public class Aufgabe3 {
 
-    public void run(List<Windkraftanlage> anlagen) {
+    private final List<Windkraftanlage> anlagen;
+
+    // --- Constructor ---
+    public Aufgabe3(List<Windkraftanlage> anlagen) {
+        this.anlagen = anlagen;
+    }
+
+    public void run() {
         System.out.println(Konstanten.A3_HEADER);
 
         if (anlagen == null || anlagen.isEmpty()) {
@@ -16,10 +24,11 @@ public class Aufgabe3 {
         }
 
         // 1. Collect statistics (Min, Max, Average)
-        // We filter out '0' because getSanitizedBaujahr() returns 0 for missing data.
+        // We now use the 'isPlausibleYear()' method which uses the Java Date API
         IntSummaryStatistics stats = anlagen.stream()
-                .mapToInt(w -> w.getTechnischeDaten().getSanitizedBaujahr())
-                .filter(year -> year > Konstanten.YEAR_MIN_VALID && year <= Konstanten.YEAR_MAX_VALID) // Filter valid years only
+                .map(Windkraftanlage::getTechnischeDaten)   // Get the TechData object first
+                .filter(TechnischeDaten::isPlausibleYear)   // Filter using our new Java API logic
+                .mapToInt(TechnischeDaten::getBaujahr)      // Convert to int
                 .summaryStatistics();
 
         if (stats.getCount() == 0) {

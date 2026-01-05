@@ -1,14 +1,21 @@
 package control;
 
 import model.Windkraftanlage;
-import utility.Konstanten; // Import constants
+import resources.Konstanten;
 import java.util.List;
 import java.util.Comparator;
 import java.util.Objects;
 
 public class Aufgabe4 {
 
-    public void run(List<Windkraftanlage> anlagen) {
+    private final List<Windkraftanlage> anlagen;
+
+    // --- Constructor ---
+    public Aufgabe4(List<Windkraftanlage> anlagen) {
+        this.anlagen = anlagen;
+    }
+
+    public void run() {
         System.out.println(Konstanten.A4_HEADER);
 
         if (anlagen == null || anlagen.isEmpty()) {

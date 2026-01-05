@@ -1,7 +1,7 @@
 package utility;
 
 import model.Standort;
-import utility.Konstanten; // Import Constants
+import resources.Konstanten; // Import Constants
 
 /**
  * Utility class for geographical distance calculations.

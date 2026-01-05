@@ -1,15 +1,22 @@
 package control;              // The class Aufgabe 1 is located in the package called control
 
 import model.Windkraftanlage; // Importing Windkraftanlage from the package called model
-import utility.Konstanten;    // Importing our new Constants class
+import resources.Konstanten;    // Importing our new Constants class
 import java.util.List;        // Importing List from Java utilities
 
 public class Aufgabe1 {
 
+    private final List<Windkraftanlage> anlagen; // Class variable to store the list
+
+    // --- Constructor to receive the list from the Controller ---
+    public Aufgabe1(List<Windkraftanlage> anlagen) {
+        this.anlagen = anlagen;
+    }
+
     /* This method checks if the list of Wind turbines is empty or not.
        If so, it prints an error message and terminates the method.
     */
-    public void run(List<Windkraftanlage> anlagen, long durationMs) {
+    public void run() {
         System.out.println(Konstanten.A1_HEADER);
 
         if (anlagen == null || anlagen.isEmpty()) {
@@ -26,8 +33,9 @@ public class Aufgabe1 {
                 .distinct()                    // Keep only unique names
                 .count();                      // Count them
 
-        System.out.println(Konstanten.A1_MSG_PARKS + numberOfParks);        // Prints count of windparks after merging the entries with same name
-        System.out.println(Konstanten.A1_MSG_DURATION + durationMs + Konstanten.UNIT_MS);   // Prints total duration
+        System.out.println(Konstanten.A1_MSG_PARKS + numberOfParks);        // Prints count of windparks
+
+
         System.out.println(Konstanten.SEPARATOR);
 
         //Prints the first 3 entries from the Windkraftanlagen file

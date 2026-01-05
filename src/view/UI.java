@@ -1,6 +1,6 @@
 package view;               // The class is located inside the package called view
 
-import utility.Konstanten;  // Imports Constants
+import resources.Konstanten;  // Imports Constants
 import java.util.Scanner;   // Imports Scanner from java utilities
 
 public class UI {

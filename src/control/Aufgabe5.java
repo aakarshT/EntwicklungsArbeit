@@ -3,7 +3,7 @@ package control;
 import model.Graph;
 import model.Windkraftanlage;
 import utility.DistanceCalculator;
-import utility.Konstanten; // Import constants
+import resources.Konstanten;
 
 import java.util.List;
 import java.util.Map;
@@ -13,16 +13,20 @@ import java.util.stream.Collectors;
 
 /**
  * Handles Aufgabe 5: Advanced Data Repair.
- * Strategy:
- * 1. "Cluster Repair": Use Name grouping and 'Typ' counts (e.g. "(3x)") to distribute power.
- * 2. "Graph Repair": Use geographic neighbors to estimate power for remaining empty entries.
  */
 public class Aufgabe5 {
+
+    private final List<Windkraftanlage> anlagen;
 
     // Regex to find numbers in brackets, e.g., "(3 WKA)" or "(2x)"
     private static final Pattern BRACKET_COUNT_PATTERN = Pattern.compile(Konstanten.REGEX_BRACKET_COUNT);
 
-    public void run(List<Windkraftanlage> anlagen) {
+    // --- Constructor ---
+    public Aufgabe5(List<Windkraftanlage> anlagen) {
+        this.anlagen = anlagen;
+    }
+
+    public void run() {
         System.out.println(Konstanten.A5_HEADER);
         long start = System.currentTimeMillis();
 
@@ -70,8 +74,7 @@ public class Aufgabe5 {
                 if (count > 0 && totalPower > 0) {
                     double unitPower = totalPower / count;
 
-                    // Apply this calculated power to ALL members of the group (including Master)
-                    // This "splits" the aggregated power into real individual power
+                    // Apply this calculated power to ALL members of the group
                     for (Windkraftanlage wka : group) {
                         Double currentP = wka.getTechnischeDaten().getSanitizedGesamtleistung();
 
@@ -156,7 +159,6 @@ public class Aufgabe5 {
         int count = 0;
         for (Windkraftanlage n : neighbors) {
             Double val = n.getTechnischeDaten().getSanitizedGesamtleistung();
-            // Filter: use only valid, reasonable values (e.g. < 8 MW to avoid using aggregated parks)
             if (val != null && val > Konstanten.A5_POWER_MIN_VALID && val < Konstanten.A5_POWER_MAX_VALID) {
                 sum += val;
                 count++;

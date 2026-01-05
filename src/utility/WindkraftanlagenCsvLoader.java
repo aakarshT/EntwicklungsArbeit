@@ -3,41 +3,52 @@ package utility;                        // The class is located inside the packa
 import model.Standort;                  // Imports Standort from the model package
 import model.TechnischeDaten;           // Imports TechnischeDaten from the model package
 import model.Windkraftanlage;           // Imports Windkraftanlage from the model package
+import resources.Konstanten;
 
+import java.io.BufferedReader;          // Import for standard file reading
 import java.io.IOException;             // Imports IO Exception for exception handling
 import java.nio.file.Files;             // Imports Files utility
 import java.nio.file.Path;              // Imports Path class
-import java.util.ArrayList;             // Imports Arraylist from the model package
-import java.util.List;                  // Imports Lists from java utilities
-import java.util.Objects;               // Imports Objects from java utilities
-import java.util.stream.Collectors;     // Imports Collectors from stream in  java utilities
-import java.util.stream.Stream;         // Imports Streams from stream in java utilities
+import java.util.ArrayList;             // Imports Arraylist
+import java.util.List;                  // Imports List interface
+import java.util.Objects;               // Imports Objects utility
 
 /**
- * Loads Windkraftanlage objects from a CSV file using Java streams.
- * Returns a mutable list to allow for data corrections.
+ * Loads Windkraftanlage objects from a CSV file using a BufferedReader.
+ * Returns a mutable list that allows data corrections.
  */
-public class WindkraftanlagenCsvLader {
+public class WindkraftanlagenCsvLoader {
 
     /**
-     * Precondition: csvPath is non-null and points to a readable CSV file.
-     * Postcondition: returns a mutable List of Windkraftanlage objects.
+     * @precondition csvPath is non-null and points to a readable CSV file.
+     * @postcondition returns a mutable List of Windkraftanlage objects.
      */
-    public List<Windkraftanlage> load(Path csvPath) throws IOException {
+    public List<Windkraftanlage> load(Path csvPath) throws IOException
+    {
         Objects.requireNonNull(csvPath, Konstanten.ERR_CSV_PATH_NULL);
 
-        try (Stream<String> lines = Files.lines(csvPath)) {
-            return lines
-                    .skip(1) // skip header line
-                    .map(this::parseLineToAnlage)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toCollection(ArrayList::new));
+        List<Windkraftanlage> resultList = new ArrayList<>();
+
+        // explicit try-with-resources to ensure the reader is closed automatically
+        try (BufferedReader br = Files.newBufferedReader(csvPath)) {
+
+            String line;
+            //Loop through the file line by line
+            while ((line = br.readLine()) != null) {
+                // Parse the line
+                Windkraftanlage wka = parseLineToAnlage(line);
+
+                // Only add if parsing was successful (not null)
+                if (wka != null) {
+                    resultList.add(wka);
+                }
+            }
         }
+
+        return resultList;
     }
 
-    /**
-     * Parses a single CSV row into a Windkraftanlage instance.
-     */
+    // Parses a single CSV row into a Windkraftanlage instance.
     private Windkraftanlage parseLineToAnlage(String line) {
         // Use Constant for the complex Regex
         String[] columns = line.split(Konstanten.REGEX_CSV_SPLIT, -1);
@@ -52,7 +63,10 @@ public class WindkraftanlagenCsvLader {
             String name = nullIfEmpty(columns[Konstanten.COL_NAME]);
 
             // Technische Daten
-            Integer baujahr = parseIntegerNullable(columns[Konstanten.COL_BAUJAHR]);
+            // Handle int conversion: Parse Integer first, then default to 0 if null
+            Integer baujahrRaw = parseIntegerNullable(columns[Konstanten.COL_BAUJAHR]);
+            int baujahr = (baujahrRaw != null) ? baujahrRaw : 0;
+
             Double gesamtleistung = parseDoubleNullable(columns[Konstanten.COL_LEISTUNG]);
             Integer anzahl = parseIntegerNullable(columns[Konstanten.COL_ANZAHL]);
             String typ = nullIfEmpty(columns[Konstanten.COL_TYP]);
@@ -69,7 +83,12 @@ public class WindkraftanlagenCsvLader {
             TechnischeDaten tech = new TechnischeDaten(baujahr, gesamtleistung, anzahl, typ);
             Standort locus = new Standort(ort, landkreis, breitengrad, laengengrad);
 
-            return new Windkraftanlage(objektId, name, tech, locus, betreiber, bemerkung);
+            return new Windkraftanlage(objektId,
+                    name,
+                    tech,
+                    locus,
+                    betreiber,
+                    bemerkung);
         } catch (Exception e) {
             return null;
         }

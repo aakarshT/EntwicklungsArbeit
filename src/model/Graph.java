@@ -1,6 +1,6 @@
 package model;
 
-import utility.Konstanten; // Import Constants
+import resources.Konstanten; // Import Constants
 import java.util.*;
 
 /**

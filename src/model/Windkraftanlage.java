@@ -1,6 +1,6 @@
 package model;         // The class Windkraftanlage is inside the package called model
 
-import utility.Konstanten; // Import Constants
+import resources.Konstanten; // Import Constants
 import java.util.Objects; // Importing Objects from Java utilities
 
 /*

@@ -1,7 +1,7 @@
 package control;
 
 import model.Windkraftanlage;
-import utility.Konstanten; // Import constants
+import resources.Konstanten;
 import java.util.*;
 
 /**
@@ -9,11 +9,17 @@ import java.util.*;
  */
 public class Aufgabe6 {
 
+    private final List<Windkraftanlage> anlagen;
+
+    // --- Constructor ---
+    public Aufgabe6(List<Windkraftanlage> anlagen) {
+        this.anlagen = anlagen;
+    }
+
     /**
-     * Precondition: anlagen is non-null.
      * Postcondition: Groups turbines by manufacturer and prints maintenance schedules.
      */
-    public void run(List<Windkraftanlage> anlagen) {
+    public void run() {
         System.out.println(Konstanten.A6_HEADER);
 
         // 1. Group turbines by Manufacturer (extracted from "Typ")

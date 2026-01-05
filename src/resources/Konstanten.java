@@ -1,4 +1,4 @@
-package utility;
+package resources;
 
 public class Konstanten {
     // --- Main Class ---
@@ -29,7 +29,7 @@ public class Konstanten {
 
     // --- Files & Paths ---
     public static final String DIR_SRC = "src";
-    public static final String DIR_RESOURCES = "resources";
+    public static final String DIR_RESOURCES = "src/resources"; // Correct path for your folder structure
     public static final String FILE_CSV = "Windkraftanlagen_DE.csv";
 
     // --- UI Strings ---
@@ -90,11 +90,11 @@ public class Konstanten {
     public static final String A2_MSG_CORRECTED = "Total Corrected entries: ";
     public static final String A2_MSG_DURATION = "Time taken for correction: ";
 
-    public static final double GEO_EARTH_RADIUS_KM = 6371.0;            //Radius of earth
-    public static final double GEO_LAT_MIN = 47.0;                      //Minimum value of latitude for germany
-    public static final double GEO_LAT_MAX = 55.5;                      //Maximum value of latitude for germany
-    public static final double GEO_LON_MIN = 5.8;                       //Minimum value of longitude for germany
-    public static final double GEO_LON_MAX = 15.1;                      //Maximum value of longitude for germany
+    public static final float GEO_EARTH_RADIUS_KM = 6371.0F;            //Radius of earth
+    public static final float GEO_LAT_MIN = 47.0F;                      //Minimum value of latitude for germany
+    public static final float GEO_LAT_MAX = 55.5F;                      //Maximum value of latitude for germany
+    public static final float GEO_LON_MIN = 5.8F;                       //Minimum value of longitude for germany
+    public static final float GEO_LON_MAX = 15.1F;                      //Maximum value of longitude for germany
 
     // --- Aufgabe 3:  ---
     public static final String A3_HEADER = "=== Aufgabe 3: ===";
@@ -131,9 +131,9 @@ public class Konstanten {
 
     public static final String REGEX_BRACKET_COUNT = "\\((\\d+)";
     public static final String BRACKET_OPEN = "(";
-    public static final double A5_MAX_DIST_KM = 15.0;
-    public static final double A5_POWER_MIN_VALID = 0.1;
-    public static final double A5_POWER_MAX_VALID = 10.0;
+    public static final float A5_MAX_DIST_KM = 15.0F;
+    public static final float A5_POWER_MIN_VALID = 0.1F;
+    public static final float A5_POWER_MAX_VALID = 10.0F;
     public static final int GRAPH_EDGE_DIVISOR = 2;
 
     // --- Aufgabe 6:  ---
@@ -148,7 +148,7 @@ public class Konstanten {
     public static final String A6_ELLIPSIS = "...";
 
     public static final int A6_TURBINES_PER_DAY = 4;
-    public static final double A6_DAYS_PER_WEEK = 5.0;
+    public static final float A6_DAYS_PER_WEEK = 5.0F;
     public static final int A6_TOP_LIMIT = 10;
     public static final int A6_MIN_NAME_LEN = 2;
     public static final int A6_TRUNCATE_LEN = 20;
